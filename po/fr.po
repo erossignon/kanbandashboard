@@ -1,0 +1,350 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Redmine-Kanban\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: Etienne Rossignon\n"
+"Language-Team: \n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.4\n"
+"Plural-Forms: nplurals=2; plural=(n>1);\n"
+
+#: views/dashboard.html
+msgid "(# per working day)"
+msgstr "(# par jour ouvré)"
+
+#: views/dashboard.html
+msgid "(average working days)"
+msgstr "(jours ouvrés moyens)"
+
+#: views/dashboard.html
+msgid "(taking user stories velocity + speed up factor 1)"
+msgstr ""
+"(en prenant en compte la vélocité des 'user stories' + speed-up facteur 1)"
+
+#: views/dashboard.html
+msgid "(vacation/week-end/bank holidays)"
+msgstr "(congès/week-end/jours fériés)"
+
+#: views/wizard.html
+msgid "API Key"
+msgstr ""
+
+#: views/dashboard.html
+msgid "Average number of generated defects per User Stories"
+msgstr "nombre  d'anomalies générées par user story"
+
+#: views/dashboard.html
+msgid "Data extracted on"
+msgstr "Données extraites le "
+
+#: views/dashboard.html
+msgid "Defects Resolution velocity"
+msgstr "Vélocité de résolution des anomalies"
+
+#: views/dashboard.html
+msgid "ETA   ..."
+msgstr "DEA ..."
+
+#: views/dashboard.html views/doc.html
+msgid "Elements de travail"
+msgstr "élements de travail"
+
+#: views/dashboard.html
+msgid "Forecast"
+msgstr "Prévision"
+
+#: views/dashboard.html
+msgid "KPI"
+msgstr "KPI"
+
+#: views/dashboard.html
+msgid "Kanban Dashboard"
+msgstr "Tableau de bord Kanban"
+
+#: views/dashboard.html
+msgid "Last Month"
+msgstr "Mois dernier"
+
+#: views/dashboard.html
+msgid "Lead Time Defect + Evo"
+msgstr "Temps de cycle Anomalies+Evolutions"
+
+#: views/dashboard.html
+msgid "Lead Time User Stories"
+msgstr "Temps de cycle User Stories"
+
+#: views/dashboard.html views/doc.html
+msgid ""
+"Les \"Tâches\" ne sont pas comptabilisées car celles-ci sont rattachées à "
+"une user story."
+msgstr ""
+"Les \"Tâches\" ne sont pas comptabilisées car celles-ci sont rattachées à "
+"une user story."
+
+#: views/dashboard.html views/doc.html
+msgid ""
+"Les \"Uses cases\" ne sont pas comptabilisés car se sont des éléments "
+"chapeaux (Epiques)."
+msgstr ""
+"Les \"Uses cases\" ne sont pas comptabilisés car se sont des éléments "
+"chapeaux (Epiques)."
+
+#: views/dashboard.html views/doc.html
+msgid ""
+"Les ARB : arbitrages d'architecture ( Action - Catégorie \"Arbitrage\" ) qui "
+"nécessitent une coordination particulière avec l'équipe socle."
+msgstr ""
+"Les ARB : arbitrages d'architecture ( Action - Catégorie \"Arbitrage\" ) qui "
+"nécessitent une coordination particulière avec l'équipe socle."
+
+#: views/dashboard.html views/doc.html
+msgid "Les Users Stories ( Exigences Catégorie \"User Story\"),"
+msgstr ""
+
+#: views/dashboard.html views/doc.html
+msgid ""
+"Les anomalies  trouvées par les key-user en phase de pré-exploitation "
+"(recette étendue),"
+msgstr ""
+
+#: views/dashboard.html views/doc.html
+msgid ""
+"Les demandes d'évolutions exprimées par les key-users en phase de pré-"
+"exploitation (recette étendue) ,"
+msgstr ""
+
+#: views/dashboard.html views/doc.html
+msgid ""
+"Les statistiques proposées sont basées sur des élements de travail suivant:"
+msgstr ""
+
+#: views/dashboard.html views/doc.html
+msgid ""
+"Les éléments de pré-qualification (Exigences Catégorie \"FAE ANO, FAE EVO\"),"
+msgstr ""
+
+#: views/dashboard.html
+msgid "Statistics  {{title}}"
+msgstr "Statistiques  {{title}}"
+
+#: views/dashboard.html
+msgid "Submit"
+msgstr "Appliquer"
+
+#: views/dashboard.html
+msgid "This Month"
+msgstr "Ce mois"
+
+#: views/dashboard.html
+msgid "Today's date"
+msgstr "Aujourd'hui"
+
+#: views/dashboard.html
+msgid "Trend"
+msgstr "Tendance"
+
+#: views/wizard.html
+msgid "URL of redmine server"
+msgstr ""
+
+#: views/dashboard.html
+msgid "Velocity User Story"
+msgstr "Vélocité des user stories"
+
+#: views/dashboard.html
+msgid "a ratio of"
+msgstr "un ratio de"
+
+#: views/dashboard.html
+msgid "and"
+msgstr "et"
+
+#: views/dashboard.html
+msgid "are already released"
+msgstr "sont déjà livrées"
+
+#: views/dashboard.html
+msgid "are currently in progress"
+msgstr "sont actuellement en cours"
+
+#: views/dashboard.html
+msgid "are still waiting in the backlog"
+msgstr "sont encore en attente dans le backlog"
+
+#: views/dashboard.html
+msgid "bugs/enhancements known so far today"
+msgstr "anomalies et évolutions connues à ce jour"
+
+#: views/dashboard.html
+msgid "bugs/evolutions per user story in average"
+msgstr "anomalies/évolutions par user story (en moyenne)"
+
+#: views/dashboard.html
+msgid "delay/advance (in calendar days)"
+msgstr "retard ou avance ( en jour calendaire)"
+
+#: views/dashboard.html
+msgid "enter Expected Time of Arrival"
+msgstr "saisir la date estimée d'arrivée"
+
+#: views/dashboard.html
+msgid "enter current Date"
+msgstr "saisir la date du jour"
+
+#: views/dashboard.html
+msgid "enter the project start date"
+msgstr "saisir la date de début du projet"
+
+#: views/dashboard.html
+msgid "estimated number of generated defects"
+msgstr "nombre estimé d'anomalies générées"
+
+#: views/dashboard.html
+msgid "given the current hypothesis :"
+msgstr "Compte tenu des hypothèses suivantes :"
+
+#: views/dashboard.html
+msgid "in which"
+msgstr "dont"
+
+#: views/dashboard.html views/doc.html
+msgid ""
+"indicateurs sont construits à partir des informations issues de Redmine."
+msgstr ""
+"indicateurs sont construits à partir des informations issues de Redmine."
+
+#: views/dashboard.html
+msgid "initial ETA date"
+msgstr "date Estimée d'Arrivée initiale"
+
+#: views/dashboard.html
+msgid "new user stories added to complete the project"
+msgstr "nouvelles users stories ajoutées pour compléter le projet"
+
+#: views/dashboard.html
+msgid "number of days to fixed remaining defect (speedup factor 1)"
+msgstr "nombre de jours pour résoudre les bugs restants (speedup factor 1)"
+
+#: views/dashboard.html
+msgid "number of days to fixed remaining defect (speedup factor 2)"
+msgstr "nombre de jours pour résoudre les bugs restants (speedup factor 2)"
+
+#: views/dashboard.html
+msgid "number of fixed defect during mixed period"
+msgstr "nombre d'anomalies à resoudre durant la période mixte"
+
+#: views/dashboard.html
+msgid "number of non working days to completion"
+msgstr "nombre de jours non travaillés jusqu'à la complétude du projet"
+
+#: views/dashboard.html
+msgid "probable Estimated Date of Arrival"
+msgstr "date probable d'atterrisage"
+
+#: views/dashboard.html
+msgid "project start date"
+msgstr "date de début"
+
+#: views/dashboard.html
+msgid "remaining defect to fix after us_story done"
+msgstr "nombre de bug à corriger pendant la période de stabilisation"
+
+#: views/dashboard.html
+msgid "units"
+msgstr "unités"
+
+#: views/dashboard.html
+msgid "users stories known so far today"
+msgstr "nombre de user stories connues à ce jour"
+
+#~ msgid "Hello World"
+#~ msgstr "Bonjour le monde"
+
+#~ msgid "Defects per User Stories"
+#~ msgstr "Anomalie par user story"
+
+#~ msgid ""
+#~ "number of non working days to completion                  <p translate="
+#~ "\"\">(vacation/week-end/bank holidays)</p>"
+#~ msgstr "nombre de jours chômés estimés entre aujourd'hui et la date de fin "
+
+#~ msgid ""
+#~ "Data extracted on<span> {{stats.today  | date:'mediumDate' }} .</span>"
+#~ msgstr ""
+#~ "données extraite sur  <span> {{stats.today  | date:'mediumDate' }} .</"
+#~ "span>"
+
+#, fuzzy
+#~ msgid ""
+#~ "<p>probable  Estimated Date of Arrival</p>                  <p>(taking "
+#~ "user stories velocity + speed up factor 1)</p>"
+#~ msgstr ""
+#~ "probable  Estimated Date of Arrival                  <p translate="
+#~ "\"\">(taking user stories velocity + speed up factor 1)</p>"
+
+#~ msgid "(congés / jours de week-end / ponts)"
+#~ msgstr "(congés / jours de week-end / ponts)"
+
+#~ msgid "Lead Time"
+#~ msgstr "Temps de cycle"
+
+#~ msgid "values"
+#~ msgstr "valeurs"
+
+#~ msgid "Cumulative Flow Chart"
+#~ msgstr "Graphe de flux cumulés"
+
+#~ msgid "Days"
+#~ msgstr "Jours"
+
+#~ msgid "Day"
+#~ msgstr "Jour"
+
+#~ msgid "Done"
+#~ msgstr "Terminé"
+
+#~ msgid "In Progress"
+#~ msgstr "En Cours"
+
+#~ msgid "Proposed"
+#~ msgstr "Proposé"
+
+#~ msgid "Planned"
+#~ msgstr "Planifié"
+
+#~ msgid "Velocity"
+#~ msgstr "Vélocité"
+
+#~ msgid "average"
+#~ msgstr "average"
+
+#~ msgid "high"
+#~ msgstr "high"
+
+#~ msgid "low"
+#~ msgstr "low"
+
+#~ msgid "min"
+#~ msgstr "min"
+
+#~ msgid "max"
+#~ msgstr "max"
+
+#~ msgid "stddev"
+#~ msgstr "stddev"
+
+#~ msgid "(speedup factor 1)"
+#~ msgstr "(speedup factor 1)"
+
+#~ msgid "(speedup factor 2)"
+#~ msgstr "(speedup factor 2)"
+
+#~ msgid "number of days to fixed remaining defect"
+#~ msgstr "nombre de jours pour résoudre les bugs restants"
+
+#~ msgid "Statistics"
+#~ msgstr "Statistiques"

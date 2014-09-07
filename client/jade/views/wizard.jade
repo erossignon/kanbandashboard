@@ -1,0 +1,57 @@
+extends layout2
+block content
+
+    link(rel='stylesheet',type='text/css',href="/stylesheets/style.css")
+
+    div(ng-controller="MyAppController",ng-init)
+
+        wizard(on-finish="finishedWizard()")
+
+            wz-step(title="Specify Redmine Server")
+
+                h2 This is the first step
+
+                p Specify the Redmine server url and API KEY.
+
+                form(name="selectURL" ng-submit="selectURL.$valid")
+                    label.control-label(for="url",type="url",translate) URL of redmine server
+                    input.form-control(ng-model="url",name="url",required)
+                    label.control-label(for="api_key",translate) API Key
+                    input.form-control(ng-model="api_key",name="api_key",required)
+                    input.btn.btn-default(type="submit",ng-click="fetch_information()",wz-next,value="Next")
+
+
+            wz-step(title="Choose Project")
+                project-selector
+
+
+            wz-step(title="Configure Status")
+                p choose one or more statuses representing "New" state
+                multi-selector(
+                    list="issue_statuses",
+                    states="sample_possible_state",options="element.id as element.name for element")
+                input.btn.btn-default(type="submit",wz-next,value="Go on")
+
+            wz-step(title="Configure Use Cases")
+                status_creator(
+
+                )
+                button.btn.btn-default(ng-click="DoStuff()") Do Stuff
+
+                input.btn.btn-default(type="submit",wz-next,value="Go on")
+
+            wz-step(title="Configure User Stories")
+                input.btn.btn-default(type="submit",wz-next,value="Go on")
+
+
+    // https://github.com/mgonto/angular-wizard
+    script(src="/angular/angular.js")
+    script(src="/angular-bootstrap/ui-bootstrap-tpls.js")
+    // script(src="/angular-google-chart/ng-google-chart.js")
+    script(src="/angular-gettext/dist/angular-gettext.js")
+    script(src="/angular-wizard/dist/angular-wizard.js")
+    script(src="/lodash/dist/lodash.min.js")
+    script(src="/javascript/wizard.js")
+    script(src="/javascript/translations.js")
+    link(rel="stylesheet",type='text/css',href="/bootstrap/dist/css/bootstrap.css")
+    link(rel="stylesheet",type='text/css',href="/angular-wizard/dist/angular-wizard.css")

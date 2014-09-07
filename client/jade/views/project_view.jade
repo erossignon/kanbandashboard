@@ -1,0 +1,54 @@
+// Created by etienne on 07/07/14.
+doctype html
+html(lang="fr")
+    head
+        title - My site
+        link(rel='stylesheet',href='/stylesheets/style.css')
+        link(rel='stylesheet',href='/stylesheets/treeGrid.css')
+    body(ng-app)
+        header
+            h1 My site
+
+        .container
+            .main-content
+                block content
+
+        div(ng-controller="MyAppController",ng-init)
+            h1 Hello {{ yourName }}!
+            tree-grid(tree-data="tree_data")
+
+
+    script(src="/angular/angular.js")
+    script(src="/angular-bootstrap-grid-tree/src/tree-grid-directive.js")
+    script(src="/javascript/redmine-kanban-core.bundle.js")
+    script(type='text/javascript').
+        function MyAppController($scope,$http) {
+            var rkc = require("rkc");
+            $scope.project = new rkc.Project();
+            $scope.yourName = "Etienne";
+            $scope.tree_data = [
+                    {Name:"USA",Area:9826675,Population:318212000,TimeZone:"UTC -5 to -10",
+                        children:[
+                            {Name:"California", Area:423970,Population:38340000,TimeZone:"Pacific Time",
+                                children:[
+                                    {Name:"San Francisco", Area:231,Population:837442,TimeZone:"PST"},
+                                    {Name:"Los Angeles", Area:503,Population:3904657,TimeZone:"PST"}
+                                ]
+                            },
+                            {Name:"Illinois", Area:57914,Population:12882135,TimeZone:"Central Time Zone",
+                                children:[
+                                    {Name:"Chicago", Area:234,Population:2695598,TimeZone:"CST"}
+                                ]
+                            }
+                ]
+                },
+                {Name:"Texas",Area:268581,Population:26448193,TimeZone:"Mountain"}
+                ];
+            $http.get('/kanban/project.json').success(function(data) {
+                $scope.project.loadString(data,function(err){
+                    $scope.project.associate_use_case_and_user_stories();
+                    console.log($scope.project);
+                    $scope.top_level_use_cases = $scope.project.top_level_use_cases;
+                });
+            });
+        }

@@ -1,0 +1,35 @@
+*.swp
+.idea
+cache
+cache*
+node_modules
+testcookie.js
+toto.csv
+tmp
+toto
+cookie*.txt
+*.pdf
+*.bak
+*.backup
+database.json
+.idea
+cache3
+too*
+toto.*
+configuration*.js
+database.*
+bower_components
+
+# automatically generated , no need to store:
+po/template.pot
+po/*.mo
+public/javascript/translations.js
+
+# auto-generated files
+views/*.html
+public/javascript/*.bundle.js
+
+
+# backup archives etc...
+*.tgz
+

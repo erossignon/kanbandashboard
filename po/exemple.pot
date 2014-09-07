@@ -1,0 +1,142 @@
+#: tmp/jade.html
+msgid "in which"
+msgstr "dont"
+
+
+msgid "and"      : "et"
+
+
+msgid "a ratio of"
+sgstr "un ratio de"
+
+msgid "Lead Time"
+msgstr "Temps de cycle"
+
+msgid "values"
+msgstr "valeurs"
+
+msgid "Cumulative Flow Chart"
+msgstr "Graphe de flux cumulés"
+
+msgid "Days"
+msgstr "Jours"
+
+msgid "Day"
+msgstr "Jour"
+
+msgid "Done"
+msgstr "Terminé"
+
+msgid "In Progress"
+msgstr "En Cours"
+
+msgid "Proposed"
+msgstr "Proposé"
+
+msgid "Planned"
+msgstr "Planifié" ,
+
+msgid "Velocity"
+msgstr "Vélocité"
+
+msgid "average"
+msgstr "average"
+
+msgid "high"
+msgstr "high"
+
+msgid "low"
+msgstr "low"
+
+msgid "min"
+msgstr "min"
+
+msgid "max"
+msgstr "max"
+
+msgid "stddev"
+msgstr "stddev"
+
+msgid "calculated with"
+msgstr "calculé avec"
+
+msgid "given the current hypothesis"
+msgstr "Compte tenu des hypothèses suivantes"
+
+msgid "bugs/enhancements known so far today"
+msgstr "bugs ou améliorations connus à ce jour"
+
+msgid "are currently in progress"
+msgstr "sont actuellement en cours"
+
+msgid "are still waiting in the backlog"
+msgstr "sont encore en attente dans le backlog"
+
+msgid "users stories known so far today"
+msgstr "users stories  connues à ce jour"
+
+msgid "are already released"
+msgstr "sont déjà livrées"
+
+msgid "bugs/evolutions per user story in average"
+msgstr "bugs ou evolutions par user story ( en moyenne)"
+
+msgid "initial ETA date"
+msgstr "date Estimée d'Arrivée"
+
+msgid "new user stories added to complete the project"
+msgstr "nombre de 'user stories' ajoutées pour compléter le projet"
+
+msgid "estimated number of generated defects"
+msgstr "nombre de défauts/anomalies générées par user story réalisée"
+
+msgid "number of fixed defect during mixed period"
+msgstr "nombre de bug corrigés pendant la période de travail"
+
+msgid "remaining defect to fix after us_story done"
+msgstr "nombre de bug à corriger pendant la période de stabilisation"
+
+msgid "(speedup factor 1)"
+msgstr "(speedup factor 1)"
+
+msgid "(speedup factor 2)"
+msgstr "(speedup factor 2)"
+
+msgid "probable  Estimated Date of Arrival"
+msgstr "Date Estimée d'Arrivée"
+
+msgid "(taking user stories velocity + speed up factor 1)"
+msgstr "(en prenant en compte la vélocité des user stories+ speed up factor 1)"
+
+msgid "number of non working days to completion"
+msgstr "nombre de jours non travaillés jusqu'à la complétude du projet"
+
+msgid "delay/advance  (in calendar days)"
+msgstr "retard/avance  (en jours calendaires)"
+
+msgid "number of days to fixed remaining defect"
+msgstr "nombre de jours pour résoudre les bugs restants"
+
+msgid "Defects per User Stories"
+msgstr "Bugs par user-story"
+
+msgid "Lead Time Defect + Evo"
+msgstr "Temps de cycle bugs+evo"
+
+msgid "Defects Resolution velocity"
+msgstr "vélocité de la résolution des bugs"
+
+msgid "Lead Time User Stories"
+msgstr "Temps de cycle User Stories"
+
+msgid "Velocity User Story"
+msgstr "Vélocité des User Stories"
+
+msgid "(# per working day)"
+msgstr "# par jour travaillé"
+
+msgid "(average working days)"
+msgstr "en moyenne ( jours travaillés)"
+
+msgid "Statistics"
+msgstr "Statistiques"

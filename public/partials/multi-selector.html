@@ -1,0 +1,16 @@
+<div>
+
+    <select ng-show={{debug}} class="form-control"  multiple ng-model="possible"  ng-options="{{options}} in list">
+    </select>
+    <p ng-show="{{debug}}">{{possible}}</p>
+
+    <div ng-repeat="name in states" class="col-md-2">
+
+        <p> {{name}}</p>
+        <select ng-size={{combo_size()}} class="form-control"  multiple ng-model="selector(name).selection" ng-click="onSelectionChanged(name)" ng-options="{{options}} in selector(name).possible">
+            <option value=""> --please select --- </option>
+        </select>
+        <p ng-show="{{debug}}">{{selector(name).selection}}</p>
+
+    </div>
+</div>

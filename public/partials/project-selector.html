@@ -1,0 +1,15 @@
+<h1> Choose AA Project</h1>
+
+<form name="selectProject"
+      ng-submit="selectProject.$valid && on_project_chosen(stuff.project)">
+
+    <select class="form-control"
+            ng-model="stuff.project"
+            ng-options="project.id as project.name for project in projects"
+            required>
+    </select>
+
+    <input class="btn btn-default" type="submit" value="Go on"/>
+
+    <p>{{project}}</p>
+</form>

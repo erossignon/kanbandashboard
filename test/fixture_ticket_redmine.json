@@ -1,0 +1,265 @@
+{
+ "issue": {
+  "id": 133,
+  "project": {
+   "id": 3,
+   "name": "Project"
+  },
+  "tracker": {
+   "id": 4,
+   "name": "User Story"
+  },
+  "status": {
+   "id": 5,
+   "name": "Fermé"
+  },
+  "priority": {
+   "id": 2,
+   "name": "Normal"
+  },
+  "author": {
+   "id": 14,
+   "name": "Joe Doe"
+  },
+  "assigned_to": {
+   "id": 11,
+   "name": "Nicolas"
+  },
+  "fixed_version": {
+   "id": 7,
+   "name": "Itération 4"
+  },
+  "parent": {
+   "id": 143
+  },
+  "subject": "lorem ipsum ",
+  "done_ratio": 0,
+  "created_on": "2014-06-04T15:09:04Z",
+  "updated_on": "2014-07-02T07:26:05Z",
+  "closed_on": "2014-07-02T07:26:05Z",
+  "relations": [
+   {
+    "id": 21,
+    "issue_id": 138,
+    "issue_to_id": 133,
+    "relation_type": "relates",
+    "delay": null
+   },
+   {
+    "id": 25,
+    "issue_id": 134,
+    "issue_to_id": 133,
+    "relation_type": "relates",
+    "delay": null
+   }
+  ],
+  "journals": [
+   {
+    "id": 421,
+    "user": {
+     "id": 14,
+     "name": "Joe Doe"
+    },
+    "notes": "",
+    "created_on": "2014-06-04T15:10:47Z",
+    "details": [
+     {
+      "property": "attr",
+      "name": "description",
+      "old_value": "",
+      "new_value": "blah"
+     }
+    ]
+   },
+   {
+    "id": 426,
+    "user": {
+     "id": 14,
+     "name": "Joe Doe"
+    },
+    "notes": "",
+    "created_on": "2014-06-05T12:22:51Z",
+    "details": [
+     {
+      "property": "attr",
+      "name": "description",
+      "old_value": "blah",
+      "new_value": "blah"
+     }
+    ]
+   },
+   {
+    "id": 429,
+    "user": {
+     "id": 14,
+     "name": "Joe Doe"
+    },
+    "notes": "",
+    "created_on": "2014-06-05T12:49:34Z",
+    "details": [
+     {
+      "property": "relation",
+      "name": "label_relates_to",
+      "new_value": "134"
+     }
+    ]
+   },
+   {
+    "id": 452,
+    "user": {
+     "id": 11,
+     "name": "Nicolas"
+    },
+    "notes": "",
+    "created_on": "2014-06-10T08:38:55Z",
+    "details": [
+     {
+      "property": "attr",
+      "name": "assigned_to_id",
+      "old_value": "19",
+      "new_value": "11"
+     }
+    ]
+   },
+   {
+    "id": 457,
+    "user": {
+     "id": 14,
+     "name": "Joe Doe"
+    },
+    "notes": "",
+    "created_on": "2014-06-10T12:07:09Z",
+    "details": [
+     {
+      "property": "relation",
+      "name": "label_relates_to",
+      "new_value": "138"
+     }
+    ]
+   },
+   {
+    "id": 481,
+    "user": {
+     "id": 14,
+     "name": "Joe Doe"
+    },
+    "notes": "",
+    "created_on": "2014-06-10T13:17:04Z",
+    "details": [
+     {
+      "property": "attr",
+      "name": "parent_id",
+      "old_value": "54",
+      "new_value": "143"
+     }
+    ]
+   },
+   {
+    "id": 484,
+    "user": {
+     "id": 14,
+     "name": "Joe Doe"
+    },
+    "notes": "",
+    "created_on": "2014-06-10T13:23:57Z",
+    "details": [
+     {
+      "property": "relation",
+      "name": "label_relates_to",
+      "old_value": "134"
+     }
+    ]
+   },
+   {
+    "id": 547,
+    "user": {
+     "id": 4,
+     "name": "Jules"
+    },
+    "notes": "",
+    "created_on": "2014-06-18T08:17:36Z",
+    "details": [
+     {
+      "property": "attr",
+      "name": "status_id",
+      "old_value": "10",
+      "new_value": "2"
+     },
+     {
+      "property": "attr",
+      "name": "story_points",
+      "new_value": "3.0"
+     }
+    ]
+   },
+   {
+    "id": 607,
+    "user": {
+     "id": 10,
+     "name": "Alexandre"
+    },
+    "notes": "",
+    "created_on": "2014-06-24T07:14:31Z",
+    "details": [
+     {
+      "property": "relation",
+      "name": "label_relates_to",
+      "new_value": "134"
+     }
+    ]
+   },
+   {
+    "id": 640,
+    "user": {
+     "id": 11,
+     "name": "James"
+    },
+    "notes": "",
+    "created_on": "2014-06-25T12:49:08Z",
+    "details": [
+     {
+      "property": "attr",
+      "name": "status_id",
+      "old_value": "2",
+      "new_value": "15"
+     }
+    ]
+   },
+   {
+    "id": 651,
+    "user": {
+     "id": 14,
+     "name": "Joe Doe"
+    },
+    "notes": "",
+    "created_on": "2014-06-30T13:39:46Z",
+    "details": [
+     {
+      "property": "attr",
+      "name": "status_id",
+      "old_value": "15",
+      "new_value": "17"
+     }
+    ]
+   },
+   {
+    "id": 662,
+    "user": {
+     "id": 14,
+     "name": "Joe Doe"
+    },
+    "notes": "",
+    "created_on": "2014-07-02T07:26:05Z",
+    "details": [
+     {
+      "property": "attr",
+      "name": "status_id",
+      "old_value": "17",
+      "new_value": "5"
+     }
+    ]
+   }
+  ],
+  "story_points": 3
+ }
+}

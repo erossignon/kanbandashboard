@@ -1,0 +1,19 @@
+extends layout2
+
+
+block content
+
+    div(ng-controller="MyAppController",ng-init)
+        div(ng-show="showMinDir")
+
+        br
+        tree-grid(tree-data="tree_data")
+
+
+    script(src="/angular/angular.js")
+    script(src="/angular-bootstrap/ui-bootstrap-tpls.js")
+    script(src="/angular-bootstrap-grid-tree/src/tree-grid-directive.js")
+    script(src="/redmine-kanban-core/redmine-kanban-core.bundle.js")
+    script(src="/javascript/use_cases2.bundle.js")
+    link(rel="stylesheet",type='text/css',href="/bootstrap/dist/css/bootstrap.css")
+    link(rel="stylesheet",type='text/css',href="/angular-bootstrap-grid-tree/src/treeGrid.css")

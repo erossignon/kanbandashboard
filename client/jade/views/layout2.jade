@@ -1,0 +1,16 @@
+doctype html
+html(lang="FR-fr")
+    head
+        title Kanban Dashboard
+
+        // script(type="text/javascript",src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js")
+        script(type="text/javascript",src="/jquery/dist/jquery.min.js")
+        script(type="text/javascript",src="/dynatree/jquery/jquery-ui.custom.js" )
+        script(type="text/javascript",src="/dynatree/jquery/jquery.cookie.js")
+        script(type="text/javascript",src="/dynatree/src/jquery.dynatree.js")
+        link(rel='stylesheet',type='text/css',href="/dynatree/src/skin/ui.dynatree.css")
+
+    body(ng-app="kanbanApp")
+        .container
+            .main-content
+                block content

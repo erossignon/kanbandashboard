@@ -1,0 +1,72 @@
+h3(style='page-break-before: always') Notices sur les indicateurs
+
+p(translate) indicateurs sont construits à partir des informations issues de Redmine.
+
+h4(translate)  Elements de travail
+
+p(translate) Les statistiques proposées sont basées sur des élements de travail suivant:
+
+ul
+    li(translate) Les Users Stories ( Exigences Catégorie "User Story"),
+    li(translate) Les éléments de pré-qualification (Exigences Catégorie "FAE ANO, FAE EVO"),
+    li(translate) Les anomalies  trouvées par les key-user en phase de pré-exploitation (recette étendue),
+    li(translate) Les demandes d'évolutions exprimées par les key-users en phase de pré-exploitation (recette étendue) ,
+    li(translate) Les ARB : arbitrages d'architecture ( Action - Catégorie "Arbitrage" ) qui nécessitent une coordination particulière avec l'équipe socle.
+
+p(translate) Les "Uses cases" ne sont pas comptabilisés car se sont des éléments chapeaux (Epiques).
+p(translate) Les "Tâches" ne sont pas comptabilisées car celles-ci sont rattachées à une user story.
+
+h4 Cumulative Flow Diagram
+
+p Le Graphe de Flux Cumulé apporte une vision de l'avancement du projet.
+
+ul
+    li  "Terminé"  : La zone inférieure indique le nombre d'éléments de travail déjà réalisés et livrés
+    li  "En cours" : La zone intermédiaire base indique le travail en cours ( Work In Progress )
+    li  "Planifié" : La zone intermédiaire haute indique le travail non commencé , mais déjà planifié
+    li  "Proposé"  : La zone supérieur indique le travail identifié maid non planifié.
+
+p.
+  La méthode Kanban tente à limiter le travail en cours ( W.I.P. = work in progress).
+  Un élément de travail non planifié est un élément dont la version cible n'est pas renseignée,ou dont la
+  version cible est une version parking lot (ST V2.X par exemple)
+
+
+h4  Temps de cycles
+
+p.
+  Le graphe temps de cycle permet de visualiser une mesure statistique des temps de cycle de réalisation des élements de travail.
+  Il est construit de la manière suivante:
+
+ul
+    li pour chaque date, on comptabilise le nombre d'éléments en cours de réalisation, dans une fenêtre glissante de 30 j
+    li on relève les statistiques sur l'échantillon prélevé, en mesurant sur chaque élément le temps de cycle
+    li le temps de cycle est la durée en jour de travail entre la date de mise en chantier et la date terminée de élément.
+    li La barre bleue indique à ces deux extremités le temps de cycle le plus long et le plus court sur l'échantillon.
+    li La zone sombre encadre la moyenne et identifie l'emplacement à +/- 0.6 sigma.
+
+p.
+    Interprétation: le temps de cycle (lead time) d'un élément de travail exprime la durée en jour entre
+    sa date d'entrée en analyse et sa date livraison.
+
+p.
+    Notre objectif est de réduire le temps de cycle. Un temps de cycle faible est un indicateur d'agilité,
+    et démontre la capacité de l'équipe à être  en mesure de mettre en oeuvre rapidement une nouvelle
+    fonctionalité dans le produit.
+
+h4 Vélocité
+
+p.
+     La vélocité traduit le nombre moyen d'éléments de travail du type spécifié traité par jour de travail.
+     Cette valeur est calculée sous forme d'une moyenne glissante basée sur une fenêtre précédent la date indiquée.
+     Une vélocité en croissance traduit une équipe qui améliore sa performance.
+     La détection des goulets d'étrangelement et les actions correctives de progrès continu, la discipline
+     permettent l'amélioration de la vélocité.
+
+h4 Defects per User Stories
+
+p.
+    Cet indicateur est la mesure statistique du nombre moyen de retours généré sous forme de bug ou de demande
+    d'évolution, suite à la livraison d'une user storie.
+    Une valeur haute traduit soit un problème de qualité soit un problème dans la précision de l'analyse et
+    de l'expression du besoin.

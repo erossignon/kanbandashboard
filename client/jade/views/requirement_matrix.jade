@@ -1,0 +1,64 @@
+extends layout2
+block content
+
+    h1 Requirement Matrix
+
+    div(ng-controller="RequirementMatrixController",ng-init)
+        p {{hello}}
+
+        table
+            tr
+                td Total score
+                td {{project.requirements_statistics.total_score}}
+            tr
+                td percent done
+                td {{project.requirements_statistics.covered_percent}}  %
+
+        hr
+
+        // exigences
+        div(ng-repeat="requirement in project._requirements")
+
+            div.row
+                div.col-lg-6
+                    h3 requirement :
+                        a(href="to_redmine") # {{requirement.id}}
+                        small &nbsp - &nbsp   {{requirement.subject}}
+                div.col-lg-6
+                    div.progress
+                        div.progress-bar(ng-style="{ 'width': '' + requirement.statistics.covered_percent + '%' }")
+                            span.sr-only {{requirement.statistics.covered_percent }} % Complete
+
+            div.row
+                div.col-lg-6
+                    table.table-bordered
+                      tr
+                            td percent
+                            td.text-right {{requirement.statistics.covered_percent }} %
+                      tr
+                            td use cases
+                            td.text-right {{requirement.statistics.nb_use_cases}}
+                      tr
+                            td uncovered use cases
+                            td.text-right {{requirement.statistics.nb_uncovered_use_cases}}
+                      tr
+                            td user stories
+                            td.text-right {{requirement.statistics.nb_user_stories}}
+                      tr
+                            td completed user stories
+                            td.text-right {{requirement.statistics.nb_user_stories_done}}
+
+                div.col-lg-6
+                    tree-grid(tree-data="get_tree_data(requirement)")
+
+
+            hr
+
+    script(src="/angular/angular.js")
+    script(src="/angular-bootstrap/ui-bootstrap-tpls.js")
+    script(src="/angular-google-chart/ng-google-chart.js")
+    script(src="/angular-bootstrap-grid-tree/src/tree-grid-directive.js")
+    script(src="/angular-gettext/dist/angular-gettext.js")
+    script(src="/javascript/requirement_matrix.bundle.js")
+    script(src="/javascript/translations.js")
+    link(rel="stylesheet",type='text/css',href="/bootstrap/dist/css/bootstrap.css")
