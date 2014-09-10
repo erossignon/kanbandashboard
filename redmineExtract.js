@@ -53,6 +53,7 @@ var argv = require('optimist')
         .describe('startDate', "specify the startDate")
         .describe('today', "overwrite today's date")
         .describe('anonymize',' anonymize intermediate database')
+        .describe('rqcvs',' export requirement as CVS file')
         .argv
     ; // node-optimist
 
@@ -63,7 +64,6 @@ var configuration = redmine_importer.setConfiguration(configuration_script);
 
 function main() {
 
-    "use strict";
 
     if (argv.today) {
         Today.set(argv.today);
@@ -235,6 +235,13 @@ function main() {
                 // user_stories.forEach(function(t){ console.log("  Getting Series : ", t.id, t.project, t.type, t.subject);});
                 // console.log(padding,"  Getting Series    : ", user_stories.length, " tickets to scan");
 
+            });
+        }
+        if (argv.rqcvs) {
+            console.log(' dumping requirement in cvs');
+            var filename = "export.cvs";
+            project.export_requirement_coverage_CSV(filename,function(err) {
+                console.log("done...");
             });
         }
         if (argv.dump_tests) {

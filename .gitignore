@@ -33,3 +33,4 @@ public/javascript/*.bundle.js
 # backup archives etc...
 *.tgz
 
+export.cvs

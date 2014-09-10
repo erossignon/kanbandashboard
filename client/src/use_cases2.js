@@ -2,7 +2,7 @@ var rkc = require("redmine-kanban-core");
 
 angular.module('kanbanApp', ['ui.bootstrap','treeGrid']).controller("MyAppController", function  MyAppController($scope, $http) {
 
-    $scope.tree_data =  [  {id:"",subject:"" , percent:"%"} ];
+    $scope.tree_data =  [  {type: "", id:"",subject:"" , percent:"%" , "nb_children": "#" , "nb_us": "#US" , nb_uc: "UC"} ];
 
     $scope.project = new rkc.Project();
 
@@ -13,13 +13,29 @@ angular.module('kanbanApp', ['ui.bootstrap','treeGrid']).controller("MyAppContro
             $scope.top_level_use_cases = $scope.project.top_level_use_cases;
             // x$scope.tree_data= $scope.top_level_use_cases;
 
+            function cumulative_nb_user_storie(workitem) {
+
+                var c = workitem.use_cases.reduce(function(old,wi){ return old + cumulative_nb_user_storie(wi);},0);
+                c += workitem.user_stories.length;
+                return c;
+            }
+            function cumulative_nb_use_cases(workitem) {
+
+                var c = workitem.use_cases.reduce(function(old,wi){ return old + cumulative_nb_use_cases(wi);},0);
+                c += workitem.use_cases.length;
+                return c;
+            }
             function mydump_use_cases(use_cases) {
                 var t = [];
                 use_cases.forEach(function(use_case){
                     t.push({
                         id: use_case.id,
+                        type: use_case.type,
                         subject: use_case.subject,
                         children: mydump_use_cases(use_case.children),
+                        nb_children:   use_case.children.length,
+                        nb_us:  cumulative_nb_user_storie(use_case),
+                        nb_uc:  cumulative_nb_use_cases(use_case),
                         percent: use_case.percent_done()
                     });
                 });

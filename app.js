@@ -58,19 +58,46 @@ function load_tickets(next) {
     });
 }
 
-console.log(" file = ", filename , fs.existsSync(filename));
 
-if (!fs.existsSync(filename)) {
-    console.log(" Warning : ",filename , " doesn't exist");
-    console.log(" make sure you've run 'redmineExtract --config "+ argv.config, "' at least once");
-    process.exit(-200);
-};
 
-fs.watch(filename, function (event, filename) {
-    load_tickets(function(){
-        console.log(" reloaded filename " +filename);
-    });
-});
+function ensure_database_exists(callback) {
+
+    console.log(" file = ", filename , fs.existsSync(filename));
+
+    if (!fs.existsSync(filename)) {
+        console.log(" Warning : ",filename , " doesn't exist");
+
+        var redmine_importer = require("./redminekanban");
+        var configuration = redmine_importer.setConfiguration(configuration_script);
+
+        redmine_importer.buildWorkItemDatabaseFromCache(function (err) {
+            if(err) {
+                console.log(" make sure you've run 'redmineExtract --config "+ argv.config, " --refresh' at least once");
+                process.exit(-200);
+            }
+            console.log("loading ticket done");
+
+            callback(err);
+        });
+    } else {
+        setImmediate(function(){ callback();  });
+    }
+}
+
+ensure_database_exists( function(err) {
+
+    if (!err) {
+        console.log("monitoring change  on ",filename);
+        fs.watch(filename, function (event, filename) {
+            load_tickets(function(){
+                console.log(" reloaded filename " +filename);
+            });
+        });
+    }
+})
+
+
+
 
 var uri_root = '/kanban';
 

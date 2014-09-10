@@ -66,43 +66,22 @@ module.exports = function(grunt) {
            options: {
                browserifyOptions: {
                    debug: true,
-                //xx   bundleExternal: true
+                   //xx   bundleExternal: true
                }
            },
-           files: {
-               src:  './client/src/requirement_matrix.js',
-               dest: './public/javascript/requirement_matrix.bundle.js'
-           }
-       },
-       _browserify: {
-           // ----------------------------------
-
-           applications: {
-               options: {
-                   debug: true,
-                   bundleExternal: true,
-
-               },
-               compile: {
-                   files: [
-                       {
-                           src:  './client/src/requirement_matrix.js',
-                           dest: './public/javascript/requirement_matrix.bundle.js'
-                       },
-                       {
-                           src: './client/src/dashboard2.js',
-                           dest: './public/javascript/dashboard2.bundle.js'
-                       },
-                       {
-                           src: './client/src/use_cases2.js',
-                           dest: './public/javascript/use_cases2.bundle.js'
-                       }
-                   ]
-               }
-
+           requirement_matrix: {
+               dest: './public/javascript/requirement_matrix.bundle.js',
+               src: './client/src/requirement_matrix.js'
+           },
+           dashboard2: {
+               dest:  './public/javascript/dashboard2.bundle.js',
+               src: './client/src/dashboard2.js'
+           },
+           use_cases2: {
+               dest: './public/javascript/use_cases2.bundle.js',
+               src: './client/src/use_cases2.js'
            }
        }
-
     });
 
     //xx grunt.loadNpmTasks('grunt-watchify');
