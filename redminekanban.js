@@ -132,7 +132,8 @@ function simplify_redmine_ticket(redmine_ticket, callback) {
 
   // relations
   if (redmine_ticket.relations) {
-      workitem.relations = redmine_ticket.relations.map(function (r) { return  r.issue_id; });
+      // use r.issue_id or r.issue_to_id
+      workitem.relations = redmine_ticket.relations.map(function (r) { return (redmine_ticket.id == r.issue_id) ? r.issue_to_id : r.issue_id; });
   }
 
   //xx // fix done ratio

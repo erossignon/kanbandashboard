@@ -52,8 +52,15 @@ function load_tickets(next) {
 
     g_project = null;
     var project = new Project();
+
     project.load(filename, function (err) {
+
         g_project = project;
+
+        var url     = configuration.url;
+        var project_name = configuration.project;
+        project.url_issue = url+ "/issues/%d";
+        console.log("project.url_issue", project.url_issue );
         next(project._work_items);
     });
 }
@@ -197,13 +204,33 @@ app.use('/', express.static(__dirname + '/public'));
 app.use('/', express.static(__dirname + '/bower_components'));
 app.use('/redmine-kanban-core', express.static(__dirname + '/node_modules/redmine-kanban-core/'));
 
+app.get(uri_root + '/main', function (req, res) {
+    res.render("main.html", {req: req, res: res, tr: tr});
+});
 
+app.get(uri_root + '/export.csv', function (req, res) {
+
+    var project = g_project;
+    var date_str = new Date().toISOString();
+    var filename = __dirname+"/export"+date_str+".csv";
+    project.associate_use_case_and_user_stories();
+    project.associate_requirements();
+    project.export_requirement_coverage_CSV(filename,function(err) {
+        res.sendFile(filename,{},function(){
+            console.log("done...");
+        });
+    });
+
+});
 app.get(uri_root + '/dashboard', function (req, res) {
     res.render("dashboard.html", {req: req, res: res, tr: tr});
 });
 
 app.get(uri_root + '/requirement_matrix', function (req, res) {
     res.render("requirement_matrix.html", {req: req, res: res, tr: tr});
+});
+app.get(uri_root + '/requirement_matrix_by_use_case', function (req, res) {
+    res.render("requirement_matrix_by_use_case.html", {req: req, res: res, tr: tr});
 });
 
 app.get(uri_root + '/use_cases', function (req, res) {
@@ -234,6 +261,8 @@ app.get(uri_root + '/refresh', function (req, res) {
 app.get(uri_root + '/project.json', function (req, res) {
 
     var s = require("serialijse");
+    console.log(" project.url_issue = ".red,g_project.url_issue);
+
     g_project.saveString(function(err,serialiseString){
         res.send(serialiseString);
     });

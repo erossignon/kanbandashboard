@@ -53,7 +53,8 @@ var argv = require('optimist')
         .describe('startDate', "specify the startDate")
         .describe('today', "overwrite today's date")
         .describe('anonymize',' anonymize intermediate database')
-        .describe('rqcvs',' export requirement as CVS file')
+        .describe('rqcsv',' export requirement as CSV file')
+
         .argv
     ; // node-optimist
 
@@ -92,6 +93,11 @@ function main() {
     var filename = path.join(configuration.cache_folder,"database.db");
 
     var project = new rkc.Project();
+
+    var url     = configuration.url;
+    var project_name = configuration.project;
+    project.url_issue = url+ "/issues/%d";
+
 
     project.load(filename, function (err) {
 
@@ -237,12 +243,15 @@ function main() {
 
             });
         }
-        if (argv.rqcvs) {
-            console.log(' dumping requirement in cvs');
-            var filename = "export.cvs";
+        if (argv.rqcsv) {
+            console.log(' dumping requirement in csv');
+            var filename = "export.csv";
+            project.associate_use_case_and_user_stories();
+            project.associate_requirements();
             project.export_requirement_coverage_CSV(filename,function(err) {
                 console.log("done...");
             });
+
         }
         if (argv.dump_tests) {
             console.log(' dumping test cases');

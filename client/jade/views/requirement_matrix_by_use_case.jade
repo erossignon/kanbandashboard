@@ -1,0 +1,50 @@
+extends layout2
+block content
+
+    h1 Requirement Matrix
+
+    div(ng-controller="RequirementMatrixController",ng-init)
+        p {{hello}}
+
+        table
+            tr
+                td Total score
+                td {{project.requirements_statistics.total_score}}
+            tr
+                td percent done
+                td {{project.requirements_statistics.covered_percent}}  %
+
+        hr
+
+        div(ng-repeat="use_case in project.use_cases")
+            div.row
+                div.col-lg-1
+                    a(ng-href="{{project.issue_url(use_case.id)}}")  {{use_case.id}}
+                div.col-lg-9
+                    span &nbsp  &nbsp {{use_case.subject}}
+            div(ng-repeat="requirement in use_case.requirements")
+                div.row
+                    div.col-lg-1
+                    div.col-lg-9
+                        a(ng-href="{{project.issue_url(requirement.id)}}")  {{requirement.id}}
+                        span &nbsp &nbsp  {{requirement.subject}}
+                        span {{JSON.stringify(requirement)}}
+                div(ng-repeat="us in project.user_story_that_implements_requirement(use_case,requirement)")
+                    div.row
+                        div.col-lg-2
+                        div.col-lg-9
+                            a(ng-href="{{project.issue_url(us.id)}}")  US # {{us.id}}
+                            span &nbsp &nbsp  {{us.subject}}
+
+
+
+    hr
+
+    script(src="/angular/angular.js")
+    script(src="/angular-bootstrap/ui-bootstrap-tpls.js")
+    script(src="/angular-google-chart/ng-google-chart.js")
+    script(src="/angular-bootstrap-grid-tree/src/tree-grid-directive.js")
+    script(src="/angular-gettext/dist/angular-gettext.js")
+    script(src="/javascript/requirement_matrix.bundle.js")
+    script(src="/javascript/translations.js")
+    link(rel="stylesheet",type='text/css',href="/bootstrap/dist/css/bootstrap.css")

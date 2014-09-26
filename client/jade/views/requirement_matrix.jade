@@ -16,21 +16,32 @@ block content
 
         hr
 
+
+        div.pagination
+            ul
+                li(ng-class="prevPageDisabled()")
+                    a(href,ng-click="prevPage()") << prev
+
+                li  {{currentPage}}
+
+                li(ng-class="nextPageDisabled()")
+                    a(href,ng-click="nextPage()") next  >>
         // exigences
+        //div(ng-repeat="requirement in project._requirements | limitTo:itemsPerPage  | startFrom:currentPage*itemsPerPage")
         div(ng-repeat="requirement in project._requirements")
 
             div.row
-                div.col-lg-6
+                div.col-lg-3
                     h3 requirement :
-                        a(href="to_redmine") # {{requirement.id}}
+                        a(ng-href="{{project.issue_url(requirement.id)}}") {{requirement.id}}
                         small &nbsp - &nbsp   {{requirement.subject}}
-                div.col-lg-6
+                div.col-lg-9
                     div.progress
                         div.progress-bar(ng-style="{ 'width': '' + requirement.statistics.covered_percent + '%' }")
                             span.sr-only {{requirement.statistics.covered_percent }} % Complete
 
             div.row
-                div.col-lg-6
+                div.col-lg-3
                     table.table-bordered
                       tr
                             td percent
@@ -48,11 +59,26 @@ block content
                             td completed user stories
                             td.text-right {{requirement.statistics.nb_user_stories_done}}
 
-                div.col-lg-6
-                    tree-grid(tree-data="get_tree_data(requirement)")
+                div.col-lg-9
+                    // tree-grid(tree-data="get_tree_data(requirement)")
+
+                    div(ng-repeat="uc in get_tree_data(requirement)")
+                        div.row.bk-primary
+                            div.col-lg-1
+                                span.glyphicon.glyphicon-bullhorn
+                                a.pull-right(ng-href="{{project.issue_url(uc.id)}}") {{uc.issue_id}}
+                            div.col-lg-10 {{uc.subject}}
+                            div.col-lg-1 {{uc.percent}}
+
+                        div.row(ng-repeat="us in uc.children" , ng-hide="uc.collapse")
+                            div.col-lg-1
+                                span.pull-right.glyphicon.glyphicon-user
+                                a(ng-href="{{project.issue_url(uc.id)}}") {{us.issue_id}}
+                            div.col-lg-10 {{us.subject}}
+                            div.col-lg-1 {{us.percent}}
 
 
-            hr
+    hr
 
     script(src="/angular/angular.js")
     script(src="/angular-bootstrap/ui-bootstrap-tpls.js")

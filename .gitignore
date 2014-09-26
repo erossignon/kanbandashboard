@@ -34,3 +34,6 @@ public/javascript/*.bundle.js
 *.tgz
 
 export.cvs
+*.csv
+
+.~*#
