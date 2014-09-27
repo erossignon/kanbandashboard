@@ -1,17 +1,21 @@
 extends layout2
 block content
 
+  div.container
+      div.panel.panel-default
+         div.panel-heading
+           h3 Menu
+         div.panel-body
+              ul.list-group
+                li.list-group-item
+                    a(href="/kanban/dashboard") Courbes de flux
+                li.list-group-item
+                    a(href="/kanban/requirement_matrix") Requirements
+                li.list-group-item
+                    a(href="/kanban/requirement_matrix_by_use_case") Requirement by use cases
+                li.list-group-item
+                    a(href="/kanban/refresh") refresh
+                li.list-group-item
+                    a(href="/kanban/export.csv") Matrix des exigences au format CSV
 
-    ul
-        li
-            a(href="/kanban/dashboard") Courbes de flux
-        li
-            a(href="/kanban/requirement_matrix") Requirements
-        li
-            a(href="/kanban/requirement_matrix_by_use_case") Requirement by use cases
-        li
-            a(href="/kanban/refresh") refresh
-
-        li
-            a(href="/kanban/export.csv") Matrix des exigences au format CSV
-
+  link(rel="stylesheet",type='text/css',href="/kanban/bootstrap/dist/css/bootstrap.css")

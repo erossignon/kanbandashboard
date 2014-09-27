@@ -3,8 +3,8 @@ doctype html
 html(lang="fr")
     head
         title - My site
-        link(rel='stylesheet',href='/stylesheets/style.css')
-        link(rel='stylesheet',href='/stylesheets/treeGrid.css')
+        link(rel='stylesheet',href='/kanban/stylesheets/style.css')
+        link(rel='stylesheet',href='/kanban/stylesheets/treeGrid.css')
     body(ng-app)
         header
             h1 My site
@@ -18,9 +18,9 @@ html(lang="fr")
             tree-grid(tree-data="tree_data")
 
 
-    script(src="/angular/angular.js")
-    script(src="/angular-bootstrap-grid-tree/src/tree-grid-directive.js")
-    script(src="/javascript/redmine-kanban-core.bundle.js")
+    script(src="/kanban/angular/angular.js")
+    script(src="/kanban/angular-bootstrap-grid-tree/src/tree-grid-directive.js")
+    script(src="/kanban/javascript/redmine-kanban-core.bundle.js")
     script(type='text/javascript').
         function MyAppController($scope,$http) {
             var rkc = require("rkc");

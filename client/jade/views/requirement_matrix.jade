@@ -16,75 +16,117 @@ block content
 
         hr
 
+        pagination.pagination-sm(max-size="7",boundary-links="true",total-items="project._requirements.length",items-per-page="itemsPerPage",ng-model="currentPage",ng-change="pageChanged()")
 
-        div.pagination
-            ul
-                li(ng-class="prevPageDisabled()")
-                    a(href,ng-click="prevPage()") << prev
-
-                li  {{currentPage}}
-
-                li(ng-class="nextPageDisabled()")
-                    a(href,ng-click="nextPage()") next  >>
-        // exigences
-        //div(ng-repeat="requirement in project._requirements | limitTo:itemsPerPage  | startFrom:currentPage*itemsPerPage")
-        div(ng-repeat="requirement in project._requirements")
-
-            div.row
-                div.col-lg-3
-                    h3 requirement :
+        div(ng-repeat="requirement in visible_requirements")
+            div.panel(options-class="{ 'panel-ok' : requirement.statistics.covered_percent>0 , 'panel-error': (requirement.statistics.nb_user_stories==0)}")
+                div.panel-heading
+                    h3.panel-title Exigence #
                         a(ng-href="{{project.issue_url(requirement.id)}}") {{requirement.id}}
                         small &nbsp - &nbsp   {{requirement.subject}}
-                div.col-lg-9
-                    div.progress
-                        div.progress-bar(ng-style="{ 'width': '' + requirement.statistics.covered_percent + '%' }")
-                            span.sr-only {{requirement.statistics.covered_percent }} % Complete
+                        span.badge.pull-right {{requirement.statistics.nb_user_stories}}
+                div.panel-body
+                    div.row
+                        div.col-sm-2 progress
+                        div.col-sm-9
+                            div.progress
+                                div.progress-bar(ng-style="{ 'width': '' + requirement.statistics.covered_percent + '%' }")
+                                    span.sr-only {{requirement.statistics.covered_percent }} % Complete
+                    div.row
+                        div.col-sm-3
+                            table.table-bordered
+                              tr
+                                    td percent
+                                    td.text-right {{requirement.statistics.covered_percent }} %
+                              tr
+                                    td use cases
+                                    td.text-right {{requirement.statistics.nb_use_cases}}
+                              tr
+                                    td uncovered use cases
+                                    td.text-right {{requirement.statistics.nb_uncovered_use_cases}}
+                              tr
+                                    td user stories
+                                    td.text-right {{requirement.statistics.nb_user_stories}}
+                              tr
+                                    td completed user stories
+                                    td.text-right {{requirement.statistics.nb_user_stories_done}}
 
-            div.row
-                div.col-lg-3
-                    table.table-bordered
-                      tr
-                            td percent
-                            td.text-right {{requirement.statistics.covered_percent }} %
-                      tr
-                            td use cases
-                            td.text-right {{requirement.statistics.nb_use_cases}}
-                      tr
-                            td uncovered use cases
-                            td.text-right {{requirement.statistics.nb_uncovered_use_cases}}
-                      tr
-                            td user stories
-                            td.text-right {{requirement.statistics.nb_user_stories}}
-                      tr
-                            td completed user stories
-                            td.text-right {{requirement.statistics.nb_user_stories_done}}
+                        div.col-sm-9
 
-                div.col-lg-9
-                    // tree-grid(tree-data="get_tree_data(requirement)")
+                            span.translate.alert.alert-warning(ng-show  ="(requirement.extra_user_stories.length + requirement.use_case_details.length)==0").
+                                                          pas de use case ni d'histoire utilisateur pour cette exigence
+                            accordion(close-others="false",ng-show="requirement.extra_user_stories.length")
+                                accordion-group(is-open="true")
+                                    accordion-heading   Histoire utilisateur sans use cases
+                                    ul.list-group
+                                            li.list-group-item.alert.alert-warning(ng-repeat="us in requirement.extra_user_stories")
+                                                a(ng-href="{{project.issue_url(us.id)}}") {{us.id}}
+                                                span - {{us.percent_done()}} - {{us.subject}}
+                                                span.pull-right.glyphicon.glyphicon-user
 
-                    div(ng-repeat="uc in get_tree_data(requirement)")
-                        div.row.bk-primary
-                            div.col-lg-1
-                                span.glyphicon.glyphicon-bullhorn
-                                a.pull-right(ng-href="{{project.issue_url(uc.id)}}") {{uc.issue_id}}
-                            div.col-lg-10 {{uc.subject}}
-                            div.col-lg-1 {{uc.percent}}
+                                accordion-group(ng-repeat="detail in requirement.use_case_details",is-open="true")
+                                    accordion-heading
+                                        a(ng-href="{{project.issue_url(detail.use_case.id)}}") {{detail.use_case.id}}
+                                        span - {{detail.use_case.percent_done()}} - {{detail.use_case.subject}}
+                                        span.pull-right.glyphicon.glyphicon-bullhorn
+                                        span.badge {{detail.user_stories.length}}
 
-                        div.row(ng-repeat="us in uc.children" , ng-hide="uc.collapse")
-                            div.col-lg-1
-                                span.pull-right.glyphicon.glyphicon-user
-                                a(ng-href="{{project.issue_url(uc.id)}}") {{us.issue_id}}
-                            div.col-lg-10 {{us.subject}}
-                            div.col-lg-1 {{us.percent}}
+                                    span(ng-hide="detail.user_stories.length").alert.alert-warning.
+                                        il n'y pas d'histoire utilisateur implementant {{requirement.subject}} dans ce CU
+
+                                    ul.list-group(ng-show="detail.user_stories.length")
+                                        li.list-group-item.alert.alert-warning(ng-repeat="us in detail.user_stories")
+                                            a(ng-href="{{project.issue_url(us.id)}}") {{us.id}}
+                                            span - {{us.percent_done()}} - {{us.subject}}
+                                            span.pull-right.glyphicon.glyphicon-user
 
 
-    hr
 
-    script(src="/angular/angular.js")
-    script(src="/angular-bootstrap/ui-bootstrap-tpls.js")
-    script(src="/angular-google-chart/ng-google-chart.js")
-    script(src="/angular-bootstrap-grid-tree/src/tree-grid-directive.js")
-    script(src="/angular-gettext/dist/angular-gettext.js")
-    script(src="/javascript/requirement_matrix.bundle.js")
-    script(src="/javascript/translations.js")
-    link(rel="stylesheet",type='text/css',href="/bootstrap/dist/css/bootstrap.css")
+
+
+    // div.row              div.row
+
+                            // tree-grid(tree-data="get_tree_data(requirement)")
+
+                            ul.list-group(ng-show="requirement.extra_user_stories.length + requirement.use_case_details.length")
+                                li.list-group-item
+                                    span.alert.alert-warning    Histoire utilisateur sans use cases
+                                li.list-group-item(ng-repeat="us in requirement.extra_user_stories")
+                                   div.row
+                                        div.col-lg-1
+                                            span.pull-right.glyphicon.glyphicon-user
+                                            a(ng-href="{{project.issue_url(us.id)}}") {{us.issue_id}}
+                                        div.col-lg-10 {{us.subject}}
+                                        div.col-lg-1 {{us.percent}}
+
+                                li.list-group-item(heading="use cases",ng-show="requirement.use_case_details.length")
+                                    span.alert.alert-success  Uses Case connectés ( {{requirement.use_case_details.length}} )
+                                li.list-group-item(ng-repeat="detail in requirement.use_case_details.length")
+                                    div.row
+                                        div.col-lg-1
+                                            span.glyphicon.glyphicon-bullhorn
+                                            a.pull-right(ng-href="{{project.issue_url(detail.use_case.id)}}") {{detail.use_case.id}}
+                                        div.col-lg-10 {{detail.use_case.subject}}
+                                        div.col-lg-1 {{detail.use_case.percent}}
+
+                                        ul.list-group
+                                            li.list-group-item.row(ng-repeat="us in detail.user_stories")
+                                                div.row
+                                                    div.col-lg-1
+                                                        span.pull-right.glyphicon.glyphicon-user
+                                                        a(ng-href="{{project.issue_url(us.id)}}") {{us.issue_id}}
+                                                    div.col-lg-10 {{us.subject}}
+                                                    div.col-lg-1 {{us.percent}}
+
+
+        pagination.pagination-sm(max-size="7",boundary-links="true",total-items="project._requirements.length",items-per-page="itemsPerPage",ng-model="currentPage",ng-change="pageChanged()")
+
+
+    script(src="/kanban/angular/angular.js")
+    script(src="/kanban/angular-bootstrap/ui-bootstrap-tpls.js")
+    script(src="/kanban/angular-google-chart/ng-google-chart.js")
+    script(src="/kanban/angular-bootstrap-grid-tree/src/tree-grid-directive.js")
+    script(src="/kanban/angular-gettext/dist/angular-gettext.js")
+    script(src="/kanban/javascript/requirement_matrix.bundle.js")
+    script(src="/kanban/javascript/translations.js")
+    link(rel="stylesheet",type='text/css',href="/kanban/bootstrap/dist/css/bootstrap.css")
