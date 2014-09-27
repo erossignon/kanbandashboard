@@ -23,7 +23,8 @@ msgstr "(jours ouvrés moyens)"
 #: views/dashboard.html
 msgid "(taking user stories velocity + speed up factor 1)"
 msgstr ""
-"(en prenant en compte la vélocité des 'user stories' + speed-up facteur 1)"
+"(en prenant en compte la vélocité des 'Histoires Utilisateur' + speed-up "
+"facteur 1)"
 
 #: views/dashboard.html
 msgid "(vacation/week-end/bank holidays)"
@@ -35,7 +36,7 @@ msgstr ""
 
 #: views/dashboard.html
 msgid "Average number of generated defects per User Stories"
-msgstr "nombre  d'anomalies générées par user story"
+msgstr "nombre  d'anomalies générées par \"Histoire Utilisateur\""
 
 #: views/dashboard.html
 msgid "Data extracted on"
@@ -75,7 +76,7 @@ msgstr "Temps de cycle Anomalies+Evolutions"
 
 #: views/dashboard.html
 msgid "Lead Time User Stories"
-msgstr "Temps de cycle User Stories"
+msgstr "Temps de cycle Histoire Utilisateur"
 
 #: views/dashboard.html views/doc.html
 msgid ""
@@ -83,23 +84,15 @@ msgid ""
 "une user story."
 msgstr ""
 "Les \"Tâches\" ne sont pas comptabilisées car celles-ci sont rattachées à "
-"une user story."
+"une Histoire Utilisateur."
 
 #: views/dashboard.html views/doc.html
 msgid ""
 "Les \"Uses cases\" ne sont pas comptabilisés car se sont des éléments "
 "chapeaux (Epiques)."
 msgstr ""
-"Les \"Uses cases\" ne sont pas comptabilisés car se sont des éléments "
+"Les \"Cas d'Usage\" ne sont pas comptabilisés car se sont des éléments "
 "chapeaux (Epiques)."
-
-#: views/dashboard.html views/doc.html
-msgid ""
-"Les ARB : arbitrages d'architecture ( Action - Catégorie \"Arbitrage\" ) qui "
-"nécessitent une coordination particulière avec l'équipe socle."
-msgstr ""
-"Les ARB : arbitrages d'architecture ( Action - Catégorie \"Arbitrage\" ) qui "
-"nécessitent une coordination particulière avec l'équipe socle."
 
 #: views/dashboard.html views/doc.html
 msgid "Les Users Stories ( Exigences Catégorie \"User Story\"),"
@@ -107,7 +100,7 @@ msgstr ""
 
 #: views/dashboard.html views/doc.html
 msgid ""
-"Les anomalies  trouvées par les key-user en phase de pré-exploitation "
+"Les anomalies  trouvées par les key-users en phase de pré-exploitation "
 "(recette étendue),"
 msgstr ""
 
@@ -123,9 +116,29 @@ msgid ""
 msgstr ""
 
 #: views/dashboard.html views/doc.html
-msgid ""
-"Les éléments de pré-qualification (Exigences Catégorie \"FAE ANO, FAE EVO\"),"
+msgid "Les éléments de pré-qualification,"
 msgstr ""
+
+#: views/requirement_matrix.html
+msgid "Orphan User stories."
+msgstr "\"Histoires Utilisateur\" orphelines"
+
+#: views/requirement_matrix.html
+msgid ""
+"Orphan user stories are associated with the requirement but are not linked "
+"to one of the use cases of this requirement."
+msgstr ""
+"Les \"Histoires Utilisateur\n"
+" orphelines sont associés à l'exigence mais sont rattachées à aucun \"Cas "
+"d'Usage\" lié à l'exigence."
+
+#: views/requirement_matrix.html
+msgid "Requirement"
+msgstr "Exigence"
+
+#: views/requirement_matrix.html
+msgid "Requirement Matrix"
+msgstr "Matrice des exigences"
 
 #: views/dashboard.html
 msgid "Statistics  {{title}}"
@@ -135,6 +148,20 @@ msgstr "Statistiques  {{title}}"
 msgid "Submit"
 msgstr "Appliquer"
 
+#: views/requirement_matrix.html
+msgid "There is no use case and user stories associated with this requirement"
+msgstr ""
+"Il n'y a ni \"Cas d'Usage\" ni \"Histoire Utilisateur\" associés à cette "
+"Exigence."
+
+#: views/requirement_matrix.html
+msgid ""
+"There is no user stories implementing {{requirement.subject}} in this use "
+"case"
+msgstr ""
+"Il n'y a pas d'\"Histoire Utilisateur\" qui implémente {{requirement."
+"subject}} dans ce \"Cas d'usage\"."
+
 #: views/dashboard.html
 msgid "This Month"
 msgstr "Ce mois"
@@ -143,17 +170,21 @@ msgstr "Ce mois"
 msgid "Today's date"
 msgstr "Aujourd'hui"
 
+#: views/requirement_matrix.html
+msgid "Total score"
+msgstr "Score total"
+
 #: views/dashboard.html
 msgid "Trend"
 msgstr "Tendance"
 
 #: views/wizard.html
 msgid "URL of redmine server"
-msgstr ""
+msgstr "URL du server redmine"
 
 #: views/dashboard.html
 msgid "Velocity User Story"
-msgstr "Vélocité des user stories"
+msgstr "Vélocité de production des Histoires Utilisateur"
 
 #: views/dashboard.html
 msgid "a ratio of"
@@ -181,7 +212,11 @@ msgstr "anomalies et évolutions connues à ce jour"
 
 #: views/dashboard.html
 msgid "bugs/evolutions per user story in average"
-msgstr "anomalies/évolutions par user story (en moyenne)"
+msgstr "anomalies/évolutions par \"Histoire Utilisateur\" (en moyenne)"
+
+#: views/requirement_matrix.html
+msgid "completed user stories"
+msgstr "\"Histoires Utilisateur\" terminées"
 
 #: views/dashboard.html
 msgid "delay/advance (in calendar days)"
@@ -219,19 +254,21 @@ msgstr ""
 
 #: views/dashboard.html
 msgid "initial ETA date"
-msgstr "date Estimée d'Arrivée initiale"
+msgstr "Date Estimée d'Arrivée initiale"
 
 #: views/dashboard.html
 msgid "new user stories added to complete the project"
-msgstr "nouvelles users stories ajoutées pour compléter le projet"
+msgstr "nouvelles \"Histoires Utilisateur\" ajoutées pour compléter le projet"
 
 #: views/dashboard.html
 msgid "number of days to fixed remaining defect (speedup factor 1)"
-msgstr "nombre de jours pour résoudre les bugs restants (speedup factor 1)"
+msgstr ""
+"nombre de jours pour résoudre les anomalies restantes (speedup factor 1)"
 
 #: views/dashboard.html
 msgid "number of days to fixed remaining defect (speedup factor 2)"
-msgstr "nombre de jours pour résoudre les bugs restants (speedup factor 2)"
+msgstr ""
+"nombre de jours pour résoudre les anomalies restants (speedup factor 2)"
 
 #: views/dashboard.html
 msgid "number of fixed defect during mixed period"
@@ -241,9 +278,21 @@ msgstr "nombre d'anomalies à resoudre durant la période mixte"
 msgid "number of non working days to completion"
 msgstr "nombre de jours non travaillés jusqu'à la complétude du projet"
 
+#: views/requirement_matrix.html
+msgid "percent"
+msgstr "%"
+
+#: views/requirement_matrix.html
+msgid "percent done"
+msgstr "% réalisé"
+
 #: views/dashboard.html
 msgid "probable Estimated Date of Arrival"
 msgstr "date probable d'atterrisage"
+
+#: views/requirement_matrix.html
+msgid "progress"
+msgstr "progression"
 
 #: views/dashboard.html
 msgid "project start date"
@@ -251,21 +300,37 @@ msgstr "date de début"
 
 #: views/dashboard.html
 msgid "remaining defect to fix after us_story done"
-msgstr "nombre de bug à corriger pendant la période de stabilisation"
+msgstr "nombre d'anomalies à corriger pendant la période de stabilisation"
+
+#: views/requirement_matrix.html
+msgid "uncovered use cases"
+msgstr "\"Cas d'Usages\" non couverts"
 
 #: views/dashboard.html
 msgid "units"
 msgstr "unités"
 
+#: views/requirement_matrix.html
+msgid "use cases"
+msgstr "\"Cas d'Usage\""
+
+#: views/requirement_matrix.html
+msgid "user stories"
+msgstr "Histoires utilisateurs"
+
 #: views/dashboard.html
 msgid "users stories known so far today"
-msgstr "nombre de user stories connues à ce jour"
+msgstr "nombre d'Histoires Utilisateur connues à ce jour"
+
+#~ msgid ""
+#~ "Les ARB : arbitrages d'architecture ( Action - Catégorie \"Arbitrage\" ) "
+#~ "qui nécessitent une coordination particulière avec l'équipe socle."
+#~ msgstr ""
+#~ "Les ARB : arbitrages d'architecture ( Action - Catégorie \"Arbitrage\" ) "
+#~ "qui nécessitent une coordination particulière avec l'équipe socle."
 
 #~ msgid "Hello World"
 #~ msgstr "Bonjour le monde"
-
-#~ msgid "Defects per User Stories"
-#~ msgstr "Anomalie par user story"
 
 #~ msgid ""
 #~ "number of non working days to completion                  <p translate="
@@ -306,9 +371,6 @@ msgstr "nombre de user stories connues à ce jour"
 
 #~ msgid "Done"
 #~ msgstr "Terminé"
-
-#~ msgid "In Progress"
-#~ msgstr "En Cours"
 
 #~ msgid "Proposed"
 #~ msgstr "Proposé"

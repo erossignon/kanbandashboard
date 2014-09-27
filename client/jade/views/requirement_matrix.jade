@@ -1,17 +1,15 @@
 extends layout2
 block content
 
-    h1 Requirement Matrix
+    h1(translate) Requirement Matrix
 
     div(ng-controller="RequirementMatrixController",ng-init)
-        p {{hello}}
-
         table
             tr
-                td Total score
+                td(translate) Total score
                 td {{project.requirements_statistics.total_score}}
             tr
-                td percent done
+                td(translate) percent done
                 td {{project.requirements_statistics.covered_percent}}  %
 
         hr
@@ -19,45 +17,50 @@ block content
         pagination.pagination-sm(max-size="7",boundary-links="true",total-items="project._requirements.length",items-per-page="itemsPerPage",ng-model="currentPage",ng-change="pageChanged()")
 
         div(ng-repeat="requirement in visible_requirements")
-            div.panel(options-class="{ 'panel-ok' : requirement.statistics.covered_percent>0 , 'panel-error': (requirement.statistics.nb_user_stories==0)}")
+            div.panel.panel-success(ng-class="{ 'panel-success' : (requirement.statistics.covered_percent>0) , 'panel-error': (requirement.statistics.nb_user_stories===0) }")
                 div.panel-heading
-                    h3.panel-title Exigence #
-                        a(ng-href="{{project.issue_url(requirement.id)}}") {{requirement.id}}
+                    h3.panel-title.panel-success
+                        span(translate) Requirement
+                        a(ng-href="{{project.issue_url(requirement.id)}}") \#{{requirement.id}}
                         small &nbsp - &nbsp   {{requirement.subject}}
                         span.badge.pull-right {{requirement.statistics.nb_user_stories}}
                 div.panel-body
-                    div.row
-                        div.col-sm-2 progress
+                    div.row(ng-hide="(requirement.extra_user_stories.length + requirement.use_case_details.length)==0")
+                        div.col-sm-2(translate) progress
                         div.col-sm-9
                             div.progress
                                 div.progress-bar(ng-style="{ 'width': '' + requirement.statistics.covered_percent + '%' }")
                                     span.sr-only {{requirement.statistics.covered_percent }} % Complete
                     div.row
                         div.col-sm-3
-                            table.table-bordered
+                            table.table-bordered(ng-hide  ="(requirement.extra_user_stories.length + requirement.use_case_details.length)==0")
                               tr
-                                    td percent
+                                    td(translate) percent
                                     td.text-right {{requirement.statistics.covered_percent }} %
                               tr
-                                    td use cases
+                                    td(translate) use cases
                                     td.text-right {{requirement.statistics.nb_use_cases}}
                               tr
-                                    td uncovered use cases
+                                    td(translate) uncovered use cases
                                     td.text-right {{requirement.statistics.nb_uncovered_use_cases}}
                               tr
-                                    td user stories
+                                    td(translate) user stories
                                     td.text-right {{requirement.statistics.nb_user_stories}}
                               tr
-                                    td completed user stories
+                                    td(translate) completed user stories
                                     td.text-right {{requirement.statistics.nb_user_stories_done}}
+                              tr
+                                    td(translate) orphan user stories
+                                    td.text-right {{requirement.extra_user_stories.length}}
 
                         div.col-sm-9
 
-                            span.translate.alert.alert-warning(ng-show  ="(requirement.extra_user_stories.length + requirement.use_case_details.length)==0").
-                                                          pas de use case ni d'histoire utilisateur pour cette exigence
+                            span.alert.alert-warning(translate,ng-show  ="(requirement.extra_user_stories.length + requirement.use_case_details.length)==0").
+                                                      There is no use case and user stories associated with this requirement
                             accordion(close-others="false",ng-show="requirement.extra_user_stories.length")
                                 accordion-group(is-open="true")
-                                    accordion-heading   Histoire utilisateur sans use cases
+                                    accordion-heading
+                                       p()   Orphan User stories.
                                     ul.list-group
                                             li.list-group-item.alert.alert-warning(ng-repeat="us in requirement.extra_user_stories")
                                                 a(ng-href="{{project.issue_url(us.id)}}") {{us.id}}
@@ -71,8 +74,8 @@ block content
                                         span.pull-right.glyphicon.glyphicon-bullhorn
                                         span.badge {{detail.user_stories.length}}
 
-                                    span(ng-hide="detail.user_stories.length").alert.alert-warning.
-                                        il n'y pas d'histoire utilisateur implementant {{requirement.subject}} dans ce CU
+                                    span(translate,ng-hide="detail.user_stories.length").alert.alert-warning.
+                                            There is no user stories implementing {{requirement.subject}} in this use case
 
                                     ul.list-group(ng-show="detail.user_stories.length")
                                         li.list-group-item.alert.alert-warning(ng-repeat="us in detail.user_stories")
@@ -80,47 +83,9 @@ block content
                                             span - {{us.percent_done()}} - {{us.subject}}
                                             span.pull-right.glyphicon.glyphicon-user
 
-
-
-
-
-    // div.row              div.row
-
-                            // tree-grid(tree-data="get_tree_data(requirement)")
-
-                            ul.list-group(ng-show="requirement.extra_user_stories.length + requirement.use_case_details.length")
-                                li.list-group-item
-                                    span.alert.alert-warning    Histoire utilisateur sans use cases
-                                li.list-group-item(ng-repeat="us in requirement.extra_user_stories")
-                                   div.row
-                                        div.col-lg-1
-                                            span.pull-right.glyphicon.glyphicon-user
-                                            a(ng-href="{{project.issue_url(us.id)}}") {{us.issue_id}}
-                                        div.col-lg-10 {{us.subject}}
-                                        div.col-lg-1 {{us.percent}}
-
-                                li.list-group-item(heading="use cases",ng-show="requirement.use_case_details.length")
-                                    span.alert.alert-success  Uses Case connectés ( {{requirement.use_case_details.length}} )
-                                li.list-group-item(ng-repeat="detail in requirement.use_case_details.length")
-                                    div.row
-                                        div.col-lg-1
-                                            span.glyphicon.glyphicon-bullhorn
-                                            a.pull-right(ng-href="{{project.issue_url(detail.use_case.id)}}") {{detail.use_case.id}}
-                                        div.col-lg-10 {{detail.use_case.subject}}
-                                        div.col-lg-1 {{detail.use_case.percent}}
-
-                                        ul.list-group
-                                            li.list-group-item.row(ng-repeat="us in detail.user_stories")
-                                                div.row
-                                                    div.col-lg-1
-                                                        span.pull-right.glyphicon.glyphicon-user
-                                                        a(ng-href="{{project.issue_url(us.id)}}") {{us.issue_id}}
-                                                    div.col-lg-10 {{us.subject}}
-                                                    div.col-lg-1 {{us.percent}}
-
-
         pagination.pagination-sm(max-size="7",boundary-links="true",total-items="project._requirements.length",items-per-page="itemsPerPage",ng-model="currentPage",ng-change="pageChanged()")
 
+    // tooltip.small() Orphan user stories are associated with the requirement but are not linked to one of the use cases of this requirement.
 
     script(src="/kanban/angular/angular.js")
     script(src="/kanban/angular-bootstrap/ui-bootstrap-tpls.js")

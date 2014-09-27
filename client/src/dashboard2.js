@@ -201,6 +201,7 @@ angular.module('kanbanApp', ['ui.bootstrap','googlechart','gettext'])
     gettextCatalog.debug = true;
 
     var myString = gettext("Hello");
+
     $scope.startDate = new Date("2011/12/01 15:00");
     $scope.endDate   = new Date("2011/12/02 15:00");
     $scope.todayDate = new Date();

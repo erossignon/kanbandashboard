@@ -1,8 +1,11 @@
 var rkc = require("redmine-kanban-core");
 
-var app = angular.module('kanbanApp', ['ui.bootstrap','treeGrid','googlechart','gettext']);
+var app = angular.module('kanbanApp', ['ui.bootstrap','treeGrid','googlechart','gettext' ]);
 
 app.controller("RequirementMatrixController", function  MyAppController($scope, $http ,gettext,gettextCatalog) {
+
+    gettextCatalog.currentLanguage = "fr";
+    gettextCatalog.debug = true;
 
 
     $scope.currentPage  = 0;

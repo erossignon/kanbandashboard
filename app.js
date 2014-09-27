@@ -200,13 +200,68 @@ app.locals.percent_bar = percent_bar;
 app.locals.ellipsys = ellipsys;
 
 
-app.use('/', express.static(__dirname + '/public'));
-app.use('/', express.static(__dirname + '/bower_components'));
-app.use('/redmine-kanban-core', express.static(__dirname + '/node_modules/redmine-kanban-core/'));
+app.use('/kanban', express.static(__dirname + '/public'));
+app.use('/kanban', express.static(__dirname + '/bower_components'));
+//xx app.use('/redmine-kanban-core', express.static(__dirname + '/node_modules/redmine-kanban-core/'));
 
 app.get(uri_root + '/main', function (req, res) {
     res.render("main.html", {req: req, res: res, tr: tr});
 });
+
+
+function exec_cmd(strCmd,done) {
+
+    console.log(strCmd.split(" "));
+
+    var util  = require('util');
+    var spawn = require('child_process').spawn;
+    var child_process    = spawn('node', strCmd.split(" "));
+
+    child_process.stdout.on('data', function (data) {
+        data.toString("ascii").split("\n").forEach(function(line) {
+            console.log('stdout: ' + line.green);
+        });
+    });
+
+    child_process.stderr.on('data', function (data) {
+        data.toString("ascii").split("\n").forEach(function(line) {
+            console.log('stderr: ' + line.red);
+        });
+    });
+
+    var done_called = false;
+    child_process.on('error',function(){
+        if (!done_called){ done_called=true; done();}
+    });
+    child_process.on('exit', function (code,signal) {
+        console.log('child process exited with code ' + code , " signal ", signal);
+        if (!done_called){ done_called=true; done();}
+    });
+}
+
+var _fetching = false;
+function launch_fetch_process(done) {
+
+    if (_fetching) {
+        console.log("already fetching".yellow)
+        done(new Error("already fetching"));
+        return;
+    }
+
+    _fetching = true;
+
+    var strCmd = "redmineExtract --config "+ argv.config + " --fetch";
+
+    exec_cmd(strCmd,function(err){
+        var strCmd2 = "redmineExtract --config "+ argv.config + " --refresh";
+        exec_cmd(strCmd2,function(err) {
+            _fetching = false;
+            done();
+        });
+    });
+
+
+}
 
 app.get(uri_root + '/export.csv', function (req, res) {
 
@@ -251,9 +306,13 @@ app.get(uri_root + '/wizard', function (req, res) {
 /**
  */
 app.get(uri_root + '/refresh', function (req, res) {
-    // get a fresh update from redmine ticket and update the cache
-    load_tickets(function() {
-        res.send("done");
+
+    launch_fetch_process(function(err){
+        // get a fresh update from redmine ticket and update the cache
+        load_tickets(function() {
+            res.send("done");
+        });
+
     });
 
 });
