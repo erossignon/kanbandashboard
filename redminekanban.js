@@ -183,7 +183,7 @@ function detect_status_change(redmine_ticket) {
             if (detail.name === "fixed_version_id") {
                 var p1 = g_adaptor.redmine_is_projectid_unplanned(detail.old_value);
                 var p2 = g_adaptor.redmine_is_projectid_unplanned(detail.new_value);
-                console.warn(" id =", redmine_ticket.id, "   ", jentry.created_on, "  : P  ", detail.old_value,p1, "-> ", detail.new_value,p2);
+                //xx console.warn(" id =", redmine_ticket.id, "   ", jentry.created_on, "  : P  ", detail.old_value,p1, "-> ", detail.new_value,p2);
                 if (p2 === false ) {
                     // gone to unplanned
                     set_status_at_date(jentry.created_on, current_status,"unplanned");
@@ -352,6 +352,7 @@ exports.buildWorkItemDatabaseFromCache = function(callback) {
             var filename = path.join(g_configuration.cache_folder,"database.db");
             project.save(filename,function(err){
                 console.log("saved...");
+                console.log(" Creation Date", project.creationDate);
                 console.log(" Start Date   ", project.startDate);
                 console.log(" Last  Update ", project.lastUpdatedDate);
                 callback(err);

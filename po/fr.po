@@ -13,6 +13,18 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n>1);\n"
 
 #: views/dashboard.html
+msgid "% Done (Time)"
+msgstr "% temps alloué déjà consommé"
+
+#: views/dashboard.html
+msgid "% Done (US)"
+msgstr "% du travail déjà réalisé"
+
+#: views/dashboard.html
+msgid "% Overrun (Time)"
+msgstr "% de dépassement"
+
+#: views/dashboard.html
 msgid "(# per working day)"
 msgstr "(# par jour ouvré)"
 
@@ -96,41 +108,33 @@ msgstr ""
 
 #: views/dashboard.html views/doc.html
 msgid "Les Users Stories ( Exigences Catégorie \"User Story\"),"
-msgstr ""
+msgstr "Les Users Stories ( Exigences Catégorie \"User Story\"),"
 
 #: views/dashboard.html views/doc.html
 msgid ""
 "Les anomalies  trouvées par les key-users en phase de pré-exploitation "
 "(recette étendue),"
 msgstr ""
+"Les anomalies  trouvées par les key-users en phase de pré-exploitation "
+"(recette étendue),"
 
 #: views/dashboard.html views/doc.html
 msgid ""
 "Les demandes d'évolutions exprimées par les key-users en phase de pré-"
 "exploitation (recette étendue) ,"
 msgstr ""
+"Les demandes d'évolutions exprimées par les key-users en phase de pré-"
+"exploitation (recette étendue) ,"
 
 #: views/dashboard.html views/doc.html
 msgid ""
 "Les statistiques proposées sont basées sur des élements de travail suivant:"
 msgstr ""
+"Les statistiques proposées sont basées sur des élements de travail suivant:"
 
 #: views/dashboard.html views/doc.html
 msgid "Les éléments de pré-qualification,"
-msgstr ""
-
-#: views/requirement_matrix.html
-msgid "Orphan User stories."
-msgstr "\"Histoires Utilisateur\" orphelines"
-
-#: views/requirement_matrix.html
-msgid ""
-"Orphan user stories are associated with the requirement but are not linked "
-"to one of the use cases of this requirement."
-msgstr ""
-"Les \"Histoires Utilisateur\n"
-" orphelines sont associés à l'exigence mais sont rattachées à aucun \"Cas "
-"d'Usage\" lié à l'exigence."
+msgstr "Les éléments de pré-qualification,"
 
 #: views/requirement_matrix.html
 msgid "Requirement"
@@ -147,6 +151,11 @@ msgstr "Statistiques  {{title}}"
 #: views/dashboard.html
 msgid "Submit"
 msgstr "Appliquer"
+
+#: views/dashboard.html views/doc.html
+msgid "The velocity used to calculated the statistics is the current velocity."
+msgstr ""
+"La vélocité utilisée pour calculer les statistiques est la vélocité courante."
 
 #: views/requirement_matrix.html
 msgid "There is no use case and user stories associated with this requirement"
@@ -165,6 +174,13 @@ msgstr ""
 #: views/dashboard.html
 msgid "This Month"
 msgstr "Ce mois"
+
+#: views/dashboard.html views/doc.html
+msgid ""
+"This velocity has been calculated using the data collected during the last "
+"30 days."
+msgstr ""
+"Cette vélocité a été calculée à partir des données des 30 derniers jours."
 
 #: views/dashboard.html
 msgid "Today's date"
@@ -186,9 +202,19 @@ msgstr "URL du server redmine"
 msgid "Velocity User Story"
 msgstr "Vélocité de production des Histoires Utilisateur"
 
+#: views/dashboard.html views/doc.html
+msgid "We expect it to be more or less stable up to the end of the projet."
+msgstr ""
+"On fait l'hypothèse que cette vélocité sera a peu près stable jusqu'à la fin "
+"du projet."
+
 #: views/dashboard.html
 msgid "a ratio of"
 msgstr "un ratio de"
+
+#: views/dashboard.html
+msgid "a velocity of"
+msgstr "Une vélocité de"
 
 #: views/dashboard.html
 msgid "and"
@@ -219,8 +245,8 @@ msgid "completed user stories"
 msgstr "\"Histoires Utilisateur\" terminées"
 
 #: views/dashboard.html
-msgid "delay/advance (in calendar days)"
-msgstr "retard ou avance ( en jour calendaire)"
+msgid "delay(+)/advance(-) (in calendar days)"
+msgstr "retard(+) ou avance(-) ( en jour calendaire)"
 
 #: views/dashboard.html
 msgid "enter Expected Time of Arrival"
@@ -235,8 +261,16 @@ msgid "enter the project start date"
 msgstr "saisir la date de début du projet"
 
 #: views/dashboard.html
+msgid "estimated actual project duration  (calendar days/working days)"
+msgstr "Durée  du projet  reestimée et probable (calendaires/jours ouvrés)"
+
+#: views/dashboard.html
 msgid "estimated number of generated defects"
 msgstr "nombre estimé d'anomalies générées"
+
+#: views/dashboard.html
+msgid "expected project duration in calendar days (calendar days/working days)"
+msgstr "Durée initialement prévue (calendaires/jours ouvrés)"
 
 #: views/dashboard.html
 msgid "given the current hypothesis :"
@@ -261,6 +295,10 @@ msgid "new user stories added to complete the project"
 msgstr "nouvelles \"Histoires Utilisateur\" ajoutées pour compléter le projet"
 
 #: views/dashboard.html
+msgid "number of calendar days/working days already spent"
+msgstr "nombre de jours déjà consommés (calendaires/ouvrés)"
+
+#: views/dashboard.html
 msgid "number of days to fixed remaining defect (speedup factor 1)"
 msgstr ""
 "nombre de jours pour résoudre les anomalies restantes (speedup factor 1)"
@@ -277,6 +315,10 @@ msgstr "nombre d'anomalies à resoudre durant la période mixte"
 #: views/dashboard.html
 msgid "number of non working days to completion"
 msgstr "nombre de jours non travaillés jusqu'à la complétude du projet"
+
+#: views/requirement_matrix.html
+msgid "orphan user stories"
+msgstr "\"Histoires Utilisateur\" orphelines"
 
 #: views/requirement_matrix.html
 msgid "percent"
@@ -299,6 +341,11 @@ msgid "project start date"
 msgstr "date de début"
 
 #: views/dashboard.html
+msgid ""
+"project start date<span> {{startDate | date : format : timezone}}</span>"
+msgstr "Début du projet <span> {{startDate | date : format : timezone}}</span>"
+
+#: views/dashboard.html
 msgid "remaining defect to fix after us_story done"
 msgstr "nombre d'anomalies à corriger pendant la période de stabilisation"
 
@@ -319,8 +366,21 @@ msgid "user stories"
 msgstr "Histoires utilisateurs"
 
 #: views/dashboard.html
+#, fuzzy
+msgid "user story per day."
+msgstr "Histoires utilisateurs par jour"
+
+#: views/dashboard.html
 msgid "users stories known so far today"
 msgstr "nombre d'Histoires Utilisateur connues à ce jour"
+
+#~ msgid ""
+#~ "Orphan user stories are associated with the requirement but are not "
+#~ "linked to one of the use cases of this requirement."
+#~ msgstr ""
+#~ "Les \"Histoires Utilisateur\n"
+#~ " orphelines sont associés à l'exigence mais sont rattachées à aucun \"Cas "
+#~ "d'Usage\" lié à l'exigence."
 
 #~ msgid ""
 #~ "Les ARB : arbitrages d'architecture ( Action - Catégorie \"Arbitrage\" ) "
@@ -377,9 +437,6 @@ msgstr "nombre d'Histoires Utilisateur connues à ce jour"
 
 #~ msgid "Planned"
 #~ msgstr "Planifié"
-
-#~ msgid "Velocity"
-#~ msgstr "Vélocité"
 
 #~ msgid "average"
 #~ msgstr "average"

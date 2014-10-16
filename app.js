@@ -25,6 +25,9 @@ var argv = require('optimist')
 var configuration_script = __dirname + "/" + argv.config;
 var configuration = require(configuration_script).config;
 
+configuration.startDate = new Date(configuration.startDate);
+configuration.eta_expected = new Date(configuration.eta_expected);
+
 /**
  * translate a neutral language string into target locale
  * @method tr
@@ -55,13 +58,19 @@ function load_tickets(next) {
 
     project.load(filename, function (err) {
 
-        g_project = project;
+        if (err) {
+            next(null);
+        } else {
+            g_project = project;
 
-        var url     = configuration.url;
-        var project_name = configuration.project;
-        project.url_issue = url+ "/issues/%d";
-        console.log("project.url_issue", project.url_issue );
-        next(project._work_items);
+            var url     = configuration.url;
+            var project_name = configuration.project;
+            project.url_issue = url+ "/issues/%d";
+            project.name =  project_name;
+            project.eta_expected  = configuration.eta_expected;
+            console.log("project.url_issue", project.url_issue );
+            next(project._work_items);
+        }
     });
 }
 
@@ -404,11 +413,23 @@ function extract_dates_from_query(req) {
         startDate: startDate,
         endDate:   endDate,
         today:     today,
-        eta_expected: eta_expected,
+        eta_expected: eta_expected
     };
     return options;
 
 }
+
+
+app.get(uri_root + '/project_info.json', function(req,res){
+
+    var result = {
+        projectName:   configuration.project,
+        startDate: configuration.startDate.toISOString(),
+        etaDate:   configuration.eta_expected.toISOString()
+    };
+    res.send(result);
+});
+
 app.get(uri_root + '/statistics.json', function (req, res) {
 
 
@@ -419,6 +440,9 @@ app.get(uri_root + '/statistics.json', function (req, res) {
     var options = extract_dates_from_query(req);
     var statistics = rck.statistics(tickets,options);
 
+    statistics.startDate =  g_project.startDate;
+    statistics.etaDate   =  g_project.eta_expected;
+
     console.log(require("util").inspect(statistics,{colors: true, depth:10}));
 
     statistics.forecasts = [];
@@ -427,8 +451,8 @@ app.get(uri_root + '/statistics.json', function (req, res) {
     statistics.forecasts.push(statistics.forecast(50));
     statistics.forecasts.push(statistics.forecast(100));
 
-    res.send(JSON.stringify(statistics, null, " "));
-
+    // res.send(JSON.stringify(statistics, null, " "));
+    res.send(statistics);
 
 });
 /**

@@ -66,6 +66,10 @@ block content
 
             h4(translate) Statistics  {{title}}
 
+
+            p(translate) project start date
+                span  {{startDate | date : format : timezone}}
+
             table.table.table-striped
                     tr
                         td(translate) KPI
@@ -155,7 +159,13 @@ block content
                     td
                         span  {{stats.ratio_defect_per_us}}
                     td(translate) bugs/evolutions per user story in average
+
                 tr
+                    td.liaison(translate) a velocity of
+                    td
+                        span {{stats.velocity_us}}
+                    td(translate) user story per day.
+                    tr
                     td.liaison(translate) initial ETA date
                     td
                     td
@@ -199,11 +209,40 @@ block content
 
                     td(ng-repeat="forecast in stats.forecasts")
                         span  {{forecast.non_business_days}}
+
+
                 tr
-                    td(translate) delay/advance (in calendar days)
+                    td(translate) number of calendar days/working days already spent
+                    td(ng-repeat="forecast in stats.forecasts")
+                        span   {{forecast.spent_days}} / {{forecast.spent_wk_days}}
+
+                tr
+                    td(translate) expected project duration in calendar days (calendar days/working days)
+                    td(ng-repeat="forecast in stats.forecasts")
+                        span   {{forecast.expected_duration}} / {{forecast.expected_wk_duration}}
+                tr
+                    td(translate) estimated actual project duration  (calendar days/working days)
+                    td(ng-repeat="forecast in stats.forecasts")
+                        span   {{forecast.probable_duration }} / {{forecast.probable_wk_duration }}
+
+                tr
+                    td(translate) % Done (US)
+                    td(ng-repeat="forecast in stats.forecasts")
+                        span   {{forecast.percent_done_us}}  %
+
+                tr
+                    td(translate) % Done (Time)
+                    td(ng-repeat="forecast in stats.forecasts")
+                        span   {{forecast.percent_done_time}} %
+
+                tr
+                    td(translate) % Overrun (Time)
+                    td(ng-repeat="forecast in stats.forecasts")
+                        span   {{forecast.percent_overrun}} %
+                tr
+                    td(translate) delay(+)/advance(-) (in calendar days)
                     td(ng-repeat="forecast in stats.forecasts")
                         span   {{forecast.delta_eta}}
-
 
             // div(google-chart,chart="chartObject",style="{{cssStyle}}")
             div(google-chart,chart="global_CumulativeFlowDiagram",style="{{cssStyle}}")

@@ -222,6 +222,16 @@ angular.module('kanbanApp', ['ui.bootstrap','googlechart','gettext'])
         startingDay: 1
     };
 
+    // Initial get start and ETA Date
+    $http.get('/kanban/project_info.json', {cache:false,params: {}}).success(function (data) {
+
+        $scope.startDate = new Date(data.startDate);
+        $scope.etaDate =  new Date(data.etaDate);
+        $scope.projectName = data.projectName;
+
+        $scope.submit();
+    });
+
     $scope.submit = function () {
 
         console.log($scope.todayDate,typeof $scope.todayDate);
@@ -240,6 +250,8 @@ angular.module('kanbanApp', ['ui.bootstrap','googlechart','gettext'])
         };
         $http.get('/kanban/statistics.json', {cache:false,params: data}).success(function (data) {
             $scope.stats = data;
+            //xx $scope.startDate = new Date(data.startDate);
+            //xx $scope.etaDate = new Date(data.etaDate);
         });
 
         // xx alert( JSON.stringify(data),new Date($scope.todayDate));
@@ -267,7 +279,7 @@ angular.module('kanbanApp', ['ui.bootstrap','googlechart','gettext'])
 
     };
 
-    $scope.submit();
+
 
 });
 

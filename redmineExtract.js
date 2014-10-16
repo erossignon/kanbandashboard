@@ -11,7 +11,8 @@ var Today = require("redmine-kanban-core").Today;
 
 var rkc = require("redmine-kanban-core");
 var get_projet_names = rkc.get_projet_names;
-var get_start_date = rkc.get_start_date;
+var get_creation_date = rkc.get_creation_date;
+var get_starting_date = rkc.get_starting_date;
 var get_last_updated_date = rkc.get_last_updated_date;
 
 var dateToYMD = rkc.dateToYMD;
@@ -109,7 +110,9 @@ function main() {
         var tickets = project._work_items;
 
         var projects = get_projet_names(tickets);
-        var startDate = get_start_date(tickets);
+        var creationDate = get_creation_date(tickets);
+        var startDate = get_starting_date(tickets);
+
         var endDate = get_last_updated_date(tickets);
 
         if (argv.startDate) {
@@ -119,6 +122,7 @@ function main() {
             endDate = new Date(argv.endDate);
         }
 
+        console.log(" project start date => ", creationDate);
         console.log(" project start date => ", startDate);
         console.log(" project end   date => ", endDate);
 
