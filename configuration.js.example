@@ -1,0 +1,285 @@
+(function(){
+
+"use strict";
+
+exports.config = {
+
+    // the url of the redmine project to monitor
+    url: "https://www.myredmineserver.com/redmine/",
+
+    // the folder to store temporary folder
+    // this folder must be unique for the proje
+    cache_folder: "cache/",
+
+    // the name of the projet
+    project: "myprojet",
+ 
+    // the expected arrival date of the projet in the form YYYY-MM-DD
+    eta_expected: "2015-01-31",
+
+    // the starting date of the projet
+    startDate: "2014-09-01",
+
+    //  your redmine API key
+    api_key:  "5......................242",
+   
+    /*X-Redmine-API-Key see http://www.redmine.org/projects/redmine/wiki/Rest_api*/
+
+    // the offline flag
+    //    - false : the kanban dashboard will update the data by fetching information
+    //              from the redmine server.
+    //    - true  : the kanban dashboard is working offline and use cached data.
+    offline:  false 
+};
+
+//
+// Issue tracker 
+// --------------
+//    
+//    The Kanban dashboard assumes that your redmine projet is organised in a way
+//    that can be match somehow the following description:
+//
+//    use cases:
+//    ----------
+//
+//    - The project scope is divided into a set of "use cases".
+//    - the "uses cases" represent the major functionalities that need to be implemented during the project.
+//    - they are supposed to be known at the begining of the projet and only serve as a canvas.
+//      Use cases are not supposed to be implemented by the team directly, they will be broken down into 
+//      work items later referred as "User Stories".
+//    - Use cases are organised in a hierarchical form (Work Breakdown Structure)
+//
+//    - for instance: You may have organised your projet in redmine using a 'Feature' and 'Use Case' issue
+//      tracker to define the following hierarchie ( using the parent child relationship):.
+//    
+//     Feature #1 - Invoicing
+//             |
+//             +-> Use Case #2 : Create a invoice
+//             |
+//             +-> Use Case #3 : Cancel an invoice
+//             |
+//             +-> Use Case #4 : Validate an invoice
+//
+//     Feature #5 - Purchase Order
+//             |
+//             +-> Use Case #6 : Emit a purchase order
+//
+// use_case_tracker : the list of the redmine issue tracker names that define the "Use cases" hierarchy.
+var use_case_tracker = ["Use Case" , "Feature"];
+
+//
+//    user stories:
+//    -------------
+//
+//    - User stories are the work items that are specifically tracked by the kanban system.
+//    - As the projet progresses, "User Stories" will be created and implemented by the
+//      developpement team.
+//    - They represent the piece of work for which we want to use to build the kanban metric such as 
+//      LeadTime, Velocity etc...
+//
+//    - "User stories" are linked to one single parent "Use Case" using a parent-child relationship.
+//
+//    for instance :
+//
+//          Use Case #2 ;: Create an invoice
+//              |
+//              +-> User Story #7 : As a project manager, I want to emit a invoice to my customer so that ...
+//              |
+//              +-> User Story #8 : As a accountant, I need to be notify when a new invoice has been created so that ..
+//
+// user_stories : the list of redmine issue tracker names that define the user stories.
+var user_stories = ["User Story","Technical Story"];
+
+//
+//
+//    bugs and defects
+//    ----------------
+//     - as the project goes along, bugs and defects will be found and will impose some rework to the team.
+//     - The kanban system keeps track of the number of bugs generated during the projet and monitor the leadtime 
+//       and velocity of their resolution.
+//     - The rate of bugs generated and their resolution velocity impacts the "estimated date of arrival" of the projets.
+//     - bugs and defects can be linked to "use cases" or "user stories" or may also simply be orphans.
+//     - bugs and defects are also work items and are monitored by the kanban system.
+//
+// defects: the list of redmine issue tracker names that define a DEFECT or a BUG.
+// Bug can be associated to a "user story" (linked tasks)
+var defects = ["Bug", "Defect"];
+
+
+// requirements : the list of redmine isse tracker names that define a REQUIREMENT
+var requirements = ["Requirement"];
+
+// enhancements : the list of redmine issue tracker names that define a ENHANCEMENT REQUEST.
+var enhancements = ["Evo"];
+
+
+// test cases : the list of redmine issue tracker name that define a TEST CASE.
+var test_cases = ["Test Case"];
+
+
+// tracking Workitem statuse
+// --------------------------
+// 
+// the kanban system analyses the status changes of work items ( users stories , bug and defects).
+// To make it simple, we only care about 3 statuses:
+//     - NEW : the  work item has been created and work hasn't started yet.
+//     - IN PROGRESS: the work on the item has started but is not yet completed.
+//     - DONE : the work item has been delivered and work is completed.
+//
+
+var statuses = {
+  "New": {
+    15:"Nouveau",
+  },
+  "In Progress": {
+    16:"À développer",
+    17:"En développement",
+    18:"À tester",
+    19:"En test",
+  },
+  "Done": {
+    20:"Validé",
+    21:"Terminé",
+    14:"Refusé"
+  }
+};
+
+
+/**
+ * utility function to return the "Category of a redmine ticket
+ */
+function cat(redmine_ticket) {
+    if (!redmine_ticket.category) { return " ----"; }
+    return redmine_ticket.category.name;
+}
+
+function extract_custom_field(redmine_ticket, field_name) {
+    var value = "";
+    for (var d in redmine_ticket.custom_fields) {
+        if (redmine_ticket.custom_fields.hasOwnProperty(d)) {
+            var o = redmine_ticket.custom_fields[d];
+            if (o.name === field_name) {
+                value = o.value + o.id;
+            }
+        }
+    }
+    return value;
+}
+
+
+function redmine_is_use_case(redmine_ticket) {
+    var c = cat(redmine_ticket);
+    if (use_case_tracker.indexOf(redmine_ticket.tracker.name) >=0) { return true; }
+    return false;
+}
+
+function redmine_is_requirement(redmine_ticket)  {
+    var c = cat(redmine_ticket);
+    if (requirements.indexOf(redmine_ticket.tracker.name) >=0) { return true; }
+    return false;
+}
+
+function redmine_is_user_story(redmine_ticket) {
+    var c = cat(redmine_ticket);
+    if (user_stories.indexOf(redmine_ticket.tracker.name) >=0) { return true; }
+    return false;
+}
+
+function redmine_is_acceptance(redmine_ticket) {
+    return false;
+}
+
+function redmine_is_evolution(redmine_ticket)  {
+    return false;
+}
+
+
+function redmine_is_arbitrage(redmine_ticket) {
+    return false;
+}
+
+function redmine_is_defect(redmine_ticket) {
+    if (defects.indexOf(redmine_ticket.tracker.name) >=0) { return true; }
+    return false;
+}
+
+function redmine_is_test_case(redmine_ticket) {
+    if (test_cases.indexOf(redmine_ticket.tracker.name) >=0) { return true; }
+    return false;
+}
+
+function redmine_complexity(redmine_ticket) {
+    extract_custom_field(redmine_ticket, "Complexité");
+}
+
+/* return true if the project is unplanned */
+function redmine_is_projectid_unplanned(project_id) {
+    if (project_id === undefined ) {
+        return true;
+    }
+    return false;
+}
+
+function redmine_check_unplanned(redmine_ticket) {
+
+    if (!redmine_ticket.fixed_version) {
+        return true;
+    }
+    return redmine_is_projectid_unplanned(redmine_ticket.fixed_version.id);
+}
+
+function redmine_simple_status(value) {
+    value = parseInt(value);
+    var ret = '----';
+
+    for( var st in ["New","In Progress","Done"]) {
+      if (statuses[st].hasOwnProperty(value)) {
+          return st;
+      }
+    }
+    ret = "*** -> " + value;
+    return ret;
+}
+
+
+var _ignore_ticket_per_type_map = {};
+function redmine_ticket_type(redmine_ticket) {
+
+    if (redmine_is_acceptance(redmine_ticket))  { return "QA";       }
+    if (redmine_is_defect(redmine_ticket))      { return "BUG";      }
+    if (redmine_is_evolution(redmine_ticket))   { return "EVO";      }
+    if (redmine_is_arbitrage(redmine_ticket))   { return "ARB";      }
+    if (redmine_is_user_story(redmine_ticket))  { return "U-S";      }
+    if (redmine_is_use_case(redmine_ticket))    { return "U-C";      }
+    if (redmine_is_test_case(redmine_ticket))   { return "Test Case";}
+    if (redmine_is_requirement(redmine_ticket)) { return "RQT";      }
+
+    var tracker_name = redmine_ticket.tracker.name;
+    if (!_ignore_ticket_per_type_map.hasOwnProperty(tracker_name)) {
+        console.log(" unknown tracker ?.????",redmine_ticket.tracker.name);
+        _ignore_ticket_per_type_map[tracker_name] =1;
+    } else {
+        _ignore_ticket_per_type_map[tracker_name]++;
+    }
+
+    return "??";
+}
+
+
+exports.adaptor = {
+    redmine_is_use_case: redmine_is_use_case,
+    redmine_is_user_story: redmine_is_user_story,
+    redmine_is_acceptance: redmine_is_acceptance,
+    redmine_is_evolution: redmine_is_evolution,
+    redmine_is_defect: redmine_is_defect,
+    redmine_is_arbitrage: redmine_is_arbitrage,
+    redmine_is_test_case: redmine_is_test_case,
+    redmine_ticket_type: redmine_ticket_type,
+    redmine_simple_status: redmine_simple_status,
+    redmine_is_projectid_unplanned: redmine_is_projectid_unplanned,
+    redmine_check_unplanned: redmine_check_unplanned,
+    redmine_complexity: redmine_complexity
+
+};
+
+})();
