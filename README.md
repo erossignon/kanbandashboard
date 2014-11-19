@@ -11,7 +11,11 @@ How to install (Linux)
 
     git clone https://github.com/erossignon/kanbandashboard
     cd kanbandashboard
+    [sudo] npm install bower grunt-cli -g
     npm install
+    bower install 
+    grunt 
+    grunt compile # to produce translation.js file
     
 
 ### create a specific configuration file 
