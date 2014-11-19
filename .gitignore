@@ -1,4 +1,5 @@
 *.swp
+npm-debug.log
 .idea
 cache
 cache*
