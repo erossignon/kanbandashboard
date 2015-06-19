@@ -5,6 +5,7 @@
  *
  *
  */
+var _ = require("underscore");
 var fs = require('fs');
 var path = require('path');
 var Today = require("redmine-kanban-core").Today;
@@ -14,7 +15,6 @@ var get_projet_names = rkc.get_projet_names;
 var get_creation_date = rkc.get_creation_date;
 var get_starting_date = rkc.get_starting_date;
 var get_last_updated_date = rkc.get_last_updated_date;
-
 var dateToYMD = rkc.dateToYMD;
 
 var redmine_importer = require("./redminekanban");
@@ -22,7 +22,7 @@ var assert = require("assert");
 
 var command = "redmineExtract";
 
-var argv = require('optimist')
+var argv = require('yargs')
         .usage(
             "usage \n" +
             "\n  to fetch workitems from a redmine server and store them in a cache :\n" +
@@ -47,7 +47,10 @@ var argv = require('optimist')
 
         .describe('alt', 'dump average lead times')
         .describe('wip', 'dump average wip progress ')
+        .string("type_filter")
         .describe('type_filter', 'type of tickets (U-S,U-C,ARB,BUG)')
+        .string("id_filter")
+        .describe('id_filter')
         .describe('dump', 'dump')
         .describe('dump_tests', 'dump_test')
         .describe('calculate_eta', 'calculate_eta')
@@ -55,6 +58,7 @@ var argv = require('optimist')
         .describe('today', "overwrite today's date")
         .describe('anonymize',' anonymize intermediate database')
         .describe('rqcsv',' export requirement as CSV file')
+
 
         .argv
     ; // node-optimist
@@ -96,7 +100,7 @@ function main() {
     var project = new rkc.Project();
 
     var url     = configuration.url;
-    var project_name = configuration.project;
+    //xx var project_name = configuration.project;
     project.url_issue = url+ "/issues/%d";
 
 
@@ -144,7 +148,16 @@ function main() {
             return;
         }
 
-        argv.type_filter = argv.type_filter | "";
+
+        if (argv.id_filter) {
+            var allowed_values = argv.id_filter.toString().split(',').map(parseInt);
+            tickets = tickets.filter(function (ticket) {
+                return allowed_values.indexOf(ticket.id) > -1;
+            });
+
+            console.log("  filtering on ID ", allowed_values, " ", tickets.length, " tickets remaining");
+
+        }
 
         // all the information are now available for treatment
         if (argv.type_filter) {
@@ -152,7 +165,24 @@ function main() {
             tickets = tickets.filter(function (ticket) {
                 return allowed_values.indexOf(ticket.type) > -1;
             });
-            console.log("  filtering on type ", allowed_values, " ", tickets.length, " tickets remaining");
+            console.log("  filtering on type ".cyan, allowed_values, " ", tickets.length, " tickets remaining");
+        }
+
+        if (argv.yyy) {
+
+            var r = tickets.map(function(t){ return parseInt(t.id);});
+            r = r.sort(function(a, b){return a-b});
+            console.log(r.join(" "));
+            return;
+        }
+        if (tickets.length === 1) {
+            var workItem = tickets[0];
+            var util = require("util");
+            var timeline = rkc.build_time_line(startDate, today);
+            console.log(util.inspect(workItem,{ colors:true }));
+            var ret = workItem.progress_bar(timeline);
+            console.log("ret = ",ret);
+
         }
 
         if (argv.dump_cvs) {

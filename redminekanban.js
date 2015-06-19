@@ -20,7 +20,6 @@ var RedmineWebServer = redmine_api.RedmineWebServer;
 var _ = require('underscore');
 
 function isoDateTime(d) {
-    "use strict";
     var curr_date = d.getDate();
     var curr_month = d.getMonth() + 1; //Months are zero based
     var curr_year = d.getFullYear();
@@ -33,16 +32,16 @@ function setRedmineAdaptor(adaptor) {
     g_adaptor = adaptor;
 }
 
-var g_configuration= null;
+var g_configuration = null;
 
-exports.setConfiguration = function(configuration_script) {
+exports.setConfiguration = function (configuration_script) {
 
 
     if (!fs.existsSync(configuration_script)) {
         console.log("  Error: redmine kanban.js cannot find its configuration file");
         console.log("  please create a configuration.js file ");
         console.log("  you can find a example at configuration.js.example");
-        throw new Error("Invalid configuration file : "+ configuration_script);
+        throw new Error("Invalid configuration file : " + configuration_script);
     }
 
     var configuration = require(configuration_script).config;
@@ -56,17 +55,14 @@ exports.setConfiguration = function(configuration_script) {
 
     configuration.startDate = new Date(configuration.startDate);
 
-    var cache_folder = 'cache/';
-    if (configuration.cache_folder) {
-        cache_folder = configuration.cache_folder;
-    }
+    configuration.cache_folder = configuration.cache_folder || 'cache/';
 
     var adaptor = require(configuration_script).adaptor;
     assert(adaptor, "configuration must have a redmine g_adaptor ");
 
     setRedmineAdaptor(adaptor);
 
-    g_configuration =  configuration;
+    g_configuration = configuration;
     return configuration;
 
 };
@@ -75,10 +71,10 @@ var WorkItem = require("redmine-kanban-core/lib/workitem").WorkItem;
 
 function redmine_parent(redmine_ticket) {
 
-  if (!redmine_ticket.parent) {
-    return "noparent";
-  }
-  return redmine_ticket.parent.id;
+    if (!redmine_ticket.parent) {
+        return "noparent";
+    }
+    return redmine_ticket.parent.id;
 }
 
 /**
@@ -97,49 +93,56 @@ function redmine_parent(redmine_ticket) {
  */
 function simplify_redmine_ticket(redmine_ticket, callback) {
 
-  assert(redmine_ticket.journals);
+    assert(redmine_ticket.id > 0);
+    assert(redmine_ticket.journals);
 
-  var workitem = new WorkItem();
-  workitem.id = redmine_ticket.id;
-  workitem.project = redmine_ticket.project.name;
-  workitem.subject = redmine_ticket.subject;
-  workitem.type = g_adaptor.redmine_ticket_type(redmine_ticket);
-  workitem.created_on = new Date(redmine_ticket.created_on);
-  workitem.updated_on = new Date(redmine_ticket.updated_on);
+    var workitem        = new WorkItem({
+        id:redmine_ticket.id
+    });
 
-  workitem.fixed_version = "";
-  workitem.current_status = "New";
+    workitem.project    = redmine_ticket.project.name;
+    workitem.subject    = redmine_ticket.subject;
+    workitem.type       = g_adaptor.redmine_ticket_type(redmine_ticket);
+    workitem.created_on = new Date(redmine_ticket.created_on);
+    workitem.updated_on = new Date(redmine_ticket.updated_on);
 
-  if (redmine_ticket.fixed_version) {
-    var unplanned = g_adaptor.redmine_check_unplanned(redmine_ticket);
-    if (!unplanned) {
-      workitem.fixed_version  = redmine_ticket.fixed_version.name;
-      workitem.current_status = g_adaptor.redmine_simple_status(redmine_ticket.status.id);
-    } else {
-       workitem.fixed_version  = "unplanned";
-       workitem.current_status = "unplanned";
+    workitem.fixed_version = "";
+    workitem.current_status = "NEW";
+
+    if (redmine_ticket.fixed_version) {
+        var unplanned = g_adaptor.redmine_check_unplanned(redmine_ticket);
+        if (!unplanned) {
+            workitem.fixed_version = redmine_ticket.fixed_version.name;
+            workitem.current_status = g_adaptor.redmine_simple_status(redmine_ticket.status.id);
+        } else {
+            workitem.fixed_version = "unplanned";
+            workitem.current_status = "unplanned";
+        }
     }
-  }
 
-  workitem.priority = redmine_ticket.priority.name;
-  workitem.complexity = g_adaptor.redmine_complexity(redmine_ticket);
+    workitem.priority = redmine_ticket.priority.name;
+    workitem.complexity = g_adaptor.redmine_complexity(redmine_ticket);
 
-  workitem.journal = detect_status_change(redmine_ticket);
+    detect_status_change(workitem,redmine_ticket);
 
-  workitem.parent_id = redmine_parent(redmine_ticket);
-  workitem.done_ratio = redmine_ticket.done_ratio;
+    workitem.parent_id = redmine_parent(redmine_ticket);
+    workitem.done_ratio = redmine_ticket.done_ratio;
 
+    // relations
+    if (redmine_ticket.relations) {
+        // use r.issue_id or r.issue_to_id
+        workitem.relations = redmine_ticket.relations.map(function (r) {
+            return (redmine_ticket.id == r.issue_id) ? r.issue_to_id : r.issue_id;
+        });
+    }
 
-  // relations
-  if (redmine_ticket.relations) {
-      // use r.issue_id or r.issue_to_id
-      workitem.relations = redmine_ticket.relations.map(function (r) { return (redmine_ticket.id == r.issue_id) ? r.issue_to_id : r.issue_id; });
-  }
+    //xx // fix done ratio
+    //xx workitem.adjust_done_ratio();
 
-  //xx // fix done ratio
-  //xx workitem.adjust_done_ratio();
-
-  callback(null,workitem);
+    if (redmine_ticket.id === 2685) {
+        console.log(workitem);
+    }
+    callback(null, workitem);
 
 }
 exports.simplify_redmine_ticket = simplify_redmine_ticket;
@@ -147,151 +150,181 @@ exports.simplify_redmine_ticket = simplify_redmine_ticket;
 /* construct the status change journal of redmine issue,
  * in a more manageable form and produce a journal
  */
-function detect_status_change(redmine_ticket) {
-    "use strict";
-    var jo = [];
+function detect_status_change(workitem,redmine_ticket) {
+
     var journals = redmine_ticket.journals;
 
+    var current_status = "New";// workitem.current_status;
+    // reset update_on status so it can be reconstructed
+    workitem.updated_on = workitem.created_on;
+    workitem.journal = [];
+    workitem.current_status =current_status;
+    workitem.set_status(workitem.created_on,current_status);
 
-    var current_status = "unknown";
-    function set_status_at_date(date,old_status,new_status) {
+    function set_status_at_date(date, old_status, new_status) {
+        date = new Date(date);
+        if (workitem.journal.length === 0 && old_status != workitem.current_status) {
+            workitem.set_status(workitem.created_on,old_status);
+        }
+        workitem.set_status(date,new_status);
+        current_status = new_status;
 
-        if (jo.length===0) {
-            jo.push({
-                date: new Date(redmine_ticket.created_on),
-                old_value: current_status,
-                new_value: old_status
-            });
-            current_status =  old_status;
-        }
-        if ( new_status != current_status) {
-            jo.push({
-                date: new Date(date),
-                old_value: current_status,
-                new_value: new_status
-            });
-            current_status = new_status;
-        }
+        //if (jo.length === 0) {
+        //    jo.push({
+        //        date: new Date(redmine_ticket.created_on),
+        //        old_value: current_status,
+        //        new_value: old_status
+        //    });
+        //    current_status = old_status;
+        //}
+        //if (new_status != current_status) {
+        //    jo.push({
+        //        date: new Date(date),
+        //        old_value: current_status,
+        //        new_value: new_status
+        //    });
+        //    current_status = new_status;
+        //}
     }
 
-
-    var current_projet = "unplanned";
     journals.forEach(function (jentry) {
+
         // scan details sections
         for (var i in jentry.details) {
             var detail = jentry.details[i];
+
             if (detail.name === "fixed_version_id") {
+
                 var p1 = g_adaptor.redmine_is_projectid_unplanned(detail.old_value);
                 var p2 = g_adaptor.redmine_is_projectid_unplanned(detail.new_value);
+
                 //xx console.warn(" id =", redmine_ticket.id, "   ", jentry.created_on, "  : P  ", detail.old_value,p1, "-> ", detail.new_value,p2);
-                if (p2 === false ) {
+                if (p2 === false) {
                     // gone to unplanned
-                    set_status_at_date(jentry.created_on, current_status,"unplanned");
+                    set_status_at_date(jentry.created_on, current_status, "unplanned");
                     return;
                 }
-            }
-            if (detail.name === "status_id") {
+            } else if (detail.name === "status_id") {
                 var s1 = detail.old_value;
                 var s2 = detail.new_value;
-                //xx console.warn(" id =", redmine_ticket.id, "    ", jentry.created_on, "  :  ", g_adaptor.redmine_simple_status(s1), " -> ", g_adaptor.redmine_simple_status(s2))
-                var old_value =  g_adaptor.redmine_simple_status(s1);
-                var new_value =  g_adaptor.redmine_simple_status(s2);
-                set_status_at_date(jentry.created_on,old_value,new_value);
+                if (redmine_ticket.id === 2685) {
+                    console.warn(" id =", redmine_ticket.id, "    ", jentry.created_on, "  :  ", g_adaptor.redmine_simple_status(s1), " -> ", g_adaptor.redmine_simple_status(s2))
+                }
+                var old_value = g_adaptor.redmine_simple_status(s1);
+                var new_value = g_adaptor.redmine_simple_status(s2);
+                set_status_at_date(jentry.created_on, old_value, new_value);
             }
         }
     });
-    return  jo;
+    //xx return jo;
+    assert(workitem.journal.length);
 }
 
 function dump_cvs_file(filename, issues) {
-  var header = ["project", "id", "type"];
-  header = header.map(function (el) {
-    return '"' + el + '"';
-  });
-  var startDate = new Date(configuration.startDate);
-  var timeline = rkc.build_time_line(startDate);
-  header = header.concat(timeline.map(function (d) {
-    return isoDateTime(d);
-  }));
-  var stream = fs.createWriteStream(filename);
-  stream.once('open', function (fd) {
-    // write header
-    var str = header.join(';');
-    console.log("  dumping ... csv", issues.length, " in ", filename);
-    stream.write(str);
-    stream.write("\n");
-    for (var i in issues) {
-      var issue = issues[i];
-      var fields = [];
-      fields.push(issue.project);
-      fields.push(issue.id);
-      fields.push(issue.type);
+    var header = ["project", "id", "type"];
+    header = header.map(function (el) {
+        return '"' + el + '"';
+    });
+    var startDate = new Date(configuration.startDate);
+    var timeline = rkc.build_time_line(startDate);
+    header = header.concat(timeline.map(function (d) {
+        return isoDateTime(d);
+    }));
+    var stream = fs.createWriteStream(filename);
+    stream.once('open', function (fd) {
+        // write header
+        var str = header.join(';');
+        console.log("  dumping ... csv", issues.length, " in ", filename);
+        stream.write(str);
+        stream.write("\n");
+        for (var i in issues) {
+            var issue = issues[i];
+            var fields = [];
+            fields.push(issue.project);
+            fields.push(issue.id);
+            fields.push(issue.type);
 
-      var s = issue.subject;
-      s.replace(/\"/g, "'");
-      // fields.push('"'+s+'"');
+            var s = issue.subject;
+            s.replace(/\"/g, "'");
+            // fields.push('"'+s+'"');
 
-      for (var t in timeline) {
-        var d = timeline[t];
-        var s = issue.find_status_at_date(d);
-        fields.push(s.substring(0, 1));
-      }
-      str = fields.join(';');
-      stream.write(str);
-      stream.write("\n");
-    }
-  });
+            for (var t in timeline) {
+                var d = timeline[t];
+                var s = issue.find_status_at_date(d);
+                fields.push(s.substring(0, 1));
+            }
+            str = fields.join(';');
+            stream.write(str);
+            stream.write("\n");
+        }
+    });
 }
 exports.dump_cvs_file = dump_cvs_file;
-
-
 
 
 /**
  *
  * @param options
  * @param callback
+ * @param callback.err {Error|null}
+ * @param callback.work_items { Array<WorkItem>}
+ *
  */
-exports.load_all_work_items= function(callback) {
+exports.load_all_work_items = function (callback) {
 
-   var options = g_configuration;
+    var options = g_configuration;
 
-   var redmine = new RedmineWebServer(g_configuration);
+    var redmine = new RedmineWebServer(g_configuration);
 
-   var ignored_tracker = {};
-   redmine.load_all_tickets(options,function(err,redmine_tickets){
+    var ignored_tracker = {};
 
-       if (!err) {
+    function _process_redmine_ticket(redmine_ticket, inner_callback) {
 
-           async.map(redmine_tickets,function(redmine_ticket,inner_callback){
-               if (g_adaptor.redmine_ticket_type(redmine_ticket) !== "??") {
-                   simplify_redmine_ticket(redmine_ticket,inner_callback);
-               } else {
-                   var tracker = redmine_ticket.tracker.name;
-                   if (!(tracker  in ignored_tracker)) {
-                       console.log(" ignoring ",redmine_ticket.tracker.name);
-                       ignored_tracker[tracker] = tracker;
-                   }
-                   inner_callback(null,null);
-               }
+        if (g_adaptor.redmine_ticket_type(redmine_ticket) !== "??") {
 
-           } ,function(err,work_items){
-               console.log(" converted : ",work_items.length,"tickets");
-               work_items =  work_items.filter(function(wi){ return wi !==null;});
-               callback(err,work_items);
-           });
+            return simplify_redmine_ticket(redmine_ticket, inner_callback);
 
-       } else {
-           console.log(" ERROR".red,err.message);
-           console.log("  STACK".red,err.stack);
-           console.log( redmine._projects);
-           callback(err);
-       }
-   });
+        } else {
+            //xx console.log("v ",redmine_ticket.tracker);
+            var tracker = redmine_ticket.tracker.name;
+            if (!(tracker  in ignored_tracker)) {
+                console.log(" ignoring ticket with tracker ", redmine_ticket.tracker.name);
+                ignored_tracker[tracker] = tracker;
+            }
+            inner_callback(null, null);
+        }
+
+    }
+
+
+    redmine.load_all_tickets(options, function (err, redmine_tickets) {
+
+        if (!err) {
+
+            assert(_.isArray(redmine_tickets));
+            console.log(" redmine_tickets = ".cyan, redmine_tickets.length);
+
+            async.map(redmine_tickets, _process_redmine_ticket, function (err, work_items) {
+                console.log(" raw converted : ", work_items.length, "tickets");
+                work_items = work_items.filter(function (wi) {
+                    return wi !== null;
+                });
+                console.log(" filtered converted : ", work_items.length, "tickets");
+                assert(work_items.length >= 0);
+                callback(err, work_items);
+            });
+
+        } else {
+            console.log(" ERROR".red, err.message);
+            console.log("  STACK".red, err.stack);
+            console.log(redmine._projects);
+            callback(err);
+        }
+    });
 };
 
 
-function anonymize_workitems(workitems,callback) {
+function anonymize_workitems(workitems, callback) {
 
     assert(_.isArray(workitems));
     assert(_.isFunction(callback));
@@ -326,36 +359,46 @@ function anonymize_workitems(workitems,callback) {
         //xx console.log(ticket);
         return workitem;
     }
+
     workitems = workitems.map(anonymize);
 
     callback(null, workitems);
 }
 
-exports.buildWorkItemDatabaseFromCache = function(callback) {
+exports.buildWorkItemDatabaseFromCache = function (callback) {
 
-    exports.load_all_work_items(function(err,workitems) {
+    exports.load_all_work_items(function (err, workitems) {
 
-        if(err) {
+        if (err) {
             console.log(" buildWorkItemDatabaseFromCache : load_all_work_items has failed");
             return callback(err);
         }
 
-        var nullTrans = function(tickets,callback) {
-            callback(null,tickets);
+        console.log(" loaded workitems : ".yellow, workitems.length);
+
+        var nullTrans = function (tickets, callback) {
+            callback(null, tickets);
         };
 
-        function persist_workitems(workitems,callback) {
+        function persist_workitems(workitems, callback) {
+
             // persist tickets to database
             var project = new rkc.Project();
-            workitems.forEach(function(workitem) { project.add_work_item(workitem);});
 
-            var filename = path.join(g_configuration.cache_folder,"database.db");
-            project.save(filename,function(err){
+            workitems.forEach(function (workitem) {
+                project.add_work_item(workitem);
+            });
+
+            var filename = path.join(g_configuration.cache_folder, "database.db");
+
+            project.save(filename, function (err) {
+
                 console.log("saved...");
                 console.log(" Creation Date", project.creationDate);
                 console.log(" Start Date   ", project.startDate);
                 console.log(" Last  Update ", project.lastUpdatedDate);
                 callback(err);
+
             });
 //                    var serialize = require("serialijse").serialize;
 //                    var serializeString = serialize(project);
@@ -368,29 +411,36 @@ exports.buildWorkItemDatabaseFromCache = function(callback) {
 //                        callback(err);
 //                    });
         }
+
         //var trans = anonymize_workitems;  // nullTrans;
         var trans = nullTrans;
-        trans(workitems,function(err,workitems){
-            if (!err) {
-                persist_workitems(workitems,callback);
-            } else {
-                callback(err);
+        trans(workitems, function (err, workitems) {
+            if (err) {
+                return callback(err);
             }
+            persist_workitems(workitems, callback);
         });
 
     });
 
 };
 
-exports.updateRedmineTicketCache = function(project,callback) {
+exports.updateRedmineTicketCache = function (project, callback) {
 
+    assert(_.isString(project) || _.isArray(project));
     assert(_.isFunction(callback));
-    var s = new RedmineWebServer(g_configuration);
-    s.fetchProjectIssues(project, function (err) {
-        s.load_all_tickets({project:project},function (err, redmine_issues) {
+    var server = new RedmineWebServer(g_configuration);
 
+    server.fetchProjectIssues(project, function (err) {
+
+        if (err) {
+            return callback(err);
+        }
+        server.load_all_tickets({project: project}, function (err, redmine_issues) {
+            if (err) {
+                return callback(err);
+            }
             exports.buildWorkItemDatabaseFromCache(callback);
-
         });
     });
 

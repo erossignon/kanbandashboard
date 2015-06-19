@@ -15,7 +15,7 @@ var Project = rck.Project;
 // load translation file
 var locale = JSON.parse(fs.readFileSync("translation.json", "utf8"));
 
-var argv = require('optimist')
+var argv = require('yargs')
     .usage("  ")
     .demand("config")
     .describe('config', 'specify the configuration js file')
@@ -53,22 +53,35 @@ var filename = path.join(configuration.cache_folder,"database.db");
 
 function load_tickets(next) {
 
+    console.log(" loading tickets ... ".cyan);
     g_project = null;
     var project = new Project();
 
     project.load(filename, function (err) {
 
         if (err) {
+            console.log(" ERROR".red, " filename :".yellow, filename);
             next(null);
         } else {
-            g_project = project;
+
+            g_project = _.clone(project);
 
             var url     = configuration.url;
             var project_name = configuration.project;
             project.url_issue = url+ "/issues/%d";
             project.name =  project_name;
             project.eta_expected  = configuration.eta_expected;
-            console.log("project.url_issue", project.url_issue );
+
+            console.log("     filename          :".yellow,filename.cyan  );
+            console.log("     start date        :".yellow,g_project.startDate   );
+            console.log("     end date          :".yellow,g_project.endDate);
+            console.log("     eta               :".yellow,g_project.eta_expected);
+            console.log("     project.url_issue :".yellow,g_project.url_issue );
+            console.log("     nb workitems      :".yellow,g_project._work_items.length);
+
+            assert(g_project.startDate);
+
+            console.log(" loading tickets done ".cyan);
             next(project._work_items);
         }
     });
@@ -363,16 +376,20 @@ app.get(uri_root + '/timeline', function (req, res) {
 
 
 function extract_dates_from_query(req) {
-    console.log(" req.query" ,req.query );
 
-    console.log(" start Date         ".cyan,req.query.startDate);
-    console.log(" end   Date         ".cyan,req.query.endDate);
-    console.log(" today              ".cyan,req.query.today);
-    console.log(" eta_expected       ".cyan,req.query.eta_expected);
+    console.log("------ REQUEST".cyan);
+    console.log(" req.query" ,req.query );
+    console.log("   start Date         ".cyan,req.query.startDate);
+    console.log("   end   Date         ".cyan,req.query.endDate);
+    console.log("   today              ".cyan,req.query.today);
+    console.log("   eta_expected       ".cyan,req.query.eta_expected);
 
     var today = new Date(req.query.today || Today());
     var startDate =  new Date( req.query.startDate || today.removeBusinessDay(10) );
     var endDate   =  new Date( req.query.endDate || startDate.addBusinessDay(10) );
+
+    assert(g_project.startDate);
+    assert(g_project.hasOwnProperty("startDate"));
 
     if (startDate.getTime() < g_project.startDate.getTime()  ) {
         startDate =   g_project.startDate;
@@ -493,7 +510,7 @@ app.get(uri_root + '/series.json', function (req, res) {
         values.throuhput = {};
         _.keys(thru).forEach(function(p){values.throuhput[p] = thru[p]; });
 
-        res.send(200,values);
+        res.status(200).send(values);
 
     }
 });

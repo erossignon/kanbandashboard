@@ -24,7 +24,7 @@
     "grunt-lib-contrib": "^0.7.1",
     "jade": "^1.7.0",
     "lodash": "^2.4.1",
-    "optimist": "0.3.4",
+    "yargs": "3.11",
     "pofile": "^0.2.12",
     "redmine-api": "erossignon/redmine-api",
     "redmine-kanban-core": "erossignon/redmine-kanban-core",
